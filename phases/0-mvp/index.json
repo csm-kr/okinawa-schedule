@@ -56,7 +56,7 @@
       "status": "completed",
       "started_at": "2026-06-17T16:12:51+0900",
       "summary": "배포 준비물 — env.example(키만, STORAGE_DRIVER=upstash + UPSTASH URL·TOKEN·ADMIN_PASSWORD·ADMIN_COOKIE_SECRET 값 비움, R4) + README '배포(환갑잔치 앱)' 섹션(Upstash 생성→Vercel 레포 연결→환경변수 5개 입력→배포·카톡 공유→/admin 일정 입력, 로컬은 STORAGE_DRIVER=memory). ENV.md 변수명과 일치, 비밀 미커밋·.env 미생성. npm run build green(7 routes), playwright 25 passed(3 게이트 skip, 회귀 없음). 실제 계정·시크릿 주입은 사용자 개입(배포는 미실행).",
-      "completed_at": "2026-06-17T16:20:00+0900"
+      "completed_at": "2026-06-17T16:16:12+0900"
     }
   ],
   "created_at": "2026-06-17T14:49:19+0900"
