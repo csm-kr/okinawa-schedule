@@ -416,6 +416,14 @@ class StepExecutor:
 
 
 def main():
+    # Windows 콘솔(cp949)은 ✓·✗·⏸·↻·박스 스피너 같은 유니코드를 못 쓴다 → UTF-8 로 강제.
+    # (없으면 step 성공 메시지 print 에서 UnicodeEncodeError 로 죽는다.)
+    for _stream in (sys.stdout, sys.stderr):
+        try:
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
+
     parser = argparse.ArgumentParser(description="Harness Step Executor")
     parser.add_argument("phase_dir", help="Phase directory name (e.g. 0-mvp)")
     parser.add_argument("--push", action="store_true", help="Push branch after completion")
