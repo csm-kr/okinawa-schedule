@@ -21,7 +21,10 @@
     {
       "step": 2,
       "name": "storage-and-api",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-06-17T15:07:04+0900",
+      "summary": "services/storage(ItineraryStore 인터페이스 + VersionConflictError, Memory/Upstash 구현, getStore 드라이버 선택) + lib/auth(상수시간 verifyPassword·HMAC 세션쿠키) + route handlers(GET/PUT /api/itinerary: 쿠키검증 401·zod 400·낙관적 동시성 409·revalidatePath, POST /api/admin/login: 200+Set-Cookie/401). TDD로 29개 테스트 선작성, npm test 45개 통과·build·lint green. vitest.config에 @/* 별칭 추가(값 import 해결).",
+      "completed_at": "2026-06-17T15:16:30+0900"
     },
     {
       "step": 3,
