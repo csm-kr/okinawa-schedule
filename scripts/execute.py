@@ -241,8 +241,12 @@ class StepExecutor:
         # 헤드리스 배치 표식: Stop hook(loop_check)이 ack/체크리스트 주입을 건너뛰고
         # 기계 게이트만 하드 실패로 적용하도록 한다. 실질 게이트는 step AC 자가검증.
         env = {**os.environ, "HARNESS_HEADLESS": "1"}
+        # 프롬프트(가드레일+docs+step 본문)는 argv가 아니라 stdin으로 전달한다.
+        # Windows 명령행 길이 한도(~32KB)를 넘으면 WinError 206으로 실패하기 때문.
+        # claude -p 는 prompt 인자가 없으면 stdin 을 프롬프트로 읽는다.
         result = subprocess.run(
-            ["claude", "-p", "--dangerously-skip-permissions", "--output-format", "json", prompt],
+            ["claude", "-p", "--dangerously-skip-permissions", "--output-format", "json"],
+            input=prompt,
             cwd=self._root, capture_output=True, text=True,
             encoding="utf-8", errors="replace", timeout=1800, env=env,
         )
