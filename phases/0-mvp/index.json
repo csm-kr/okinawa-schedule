@@ -16,7 +16,7 @@
       "status": "completed",
       "started_at": "2026-06-17T15:00:13+0900",
       "summary": "types/itinerary.ts(도메인 타입) + lib/time.ts(combineKst, Intl Asia/Seoul tz-aware) + lib/status.ts(getItemStatus·findCurrentAndNext·getEventPhase) 순수 함수. TDD로 time.test(3)·status.test(12) 선작성, npm test 16개 통과·build·lint green.",
-      "completed_at": "2026-06-17T15:06:00+0900"
+      "completed_at": "2026-06-17T15:07:04+0900"
     },
     {
       "step": 2,
