@@ -1,0 +1,22 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# env / secrets (값 커밋 금지 — 키만 .env.example)
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# phase execution outputs
+phases/**/phase*-output.json
+phases/**/step*-output.json
+
+# loop check ack (diff-signature bound; not shared)
+.claude/.loop-ack
