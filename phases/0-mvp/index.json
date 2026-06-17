@@ -32,7 +32,7 @@
       "status": "completed",
       "started_at": "2026-06-17T15:17:13+0900",
       "summary": "공개 `/` 타임라인 — 디자인 토큰(tailwind 팔레트·rem 타입스케일 + globals.css 본문 18px 하한) + 컴포넌트(TimelineItem·TimelineList·DayTabs·StatusCard·useNow 훅·TimelineView 클라이언트 래퍼) RTL TDD 24개 + page/loading/error.tsx(서버는 getStore().get()만, 헤더는 빈 상태에도 노출). E2E timeline.spec(login+PUT 시드·page.clock 시각 고정)으로 현재 강조·날짜 탭·R8(18px/48px) 검증. npm test 69개·build·lint green, playwright iphone/android 8개 green. playwright webServer env(memory·테스트 비번) 추가.",
-      "completed_at": "2026-06-17T15:35:00+0900"
+      "completed_at": "2026-06-17T15:34:17+0900"
     },
     {
       "step": 4,
