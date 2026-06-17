@@ -114,3 +114,35 @@ python -m pytest scripts/                 # 하니스 자체 테스트
 1. 루트에서 `/harness` 를 실행해 A(설치)~C(논의)를 진행하고 `CLAUDE.md` 의 placeholder(기술 스택·아키텍처 규칙·§명령어)를 이 프로젝트에 맞게 채운다.
 2. `docs/` 정본을 채운다(인덱스: [docs/INDEX.md](./docs/INDEX.md)).
 3. D(설계)~E(파일 생성)로 `phases/{task}/` 를 만든 뒤 `python scripts/execute.py {task}` 로 실행한다.
+
+---
+
+## 배포 (환갑잔치 가족 안내 웹앱)
+
+> 이 레포로 만든 앱(`src/`)을 Vercel + Upstash Redis 무료 티어로 배포하는 절차다. 비밀 값은
+> 레포에 커밋하지 않고 **Vercel 환경 변수로만** 주입한다. 변수 정의는 [docs/dev/ENV.md](./docs/dev/ENV.md),
+> 키 템플릿은 [`env.example`](./env.example) 참고.
+
+1. **Upstash Redis 생성** — [Upstash](https://upstash.com) 콘솔에서 Redis 데이터베이스를 새로
+   만들고, **REST URL** 과 **REST TOKEN** 을 복사한다(각각 `UPSTASH_REDIS_REST_URL`,
+   `UPSTASH_REDIS_REST_TOKEN`).
+2. **Vercel 에 레포 연결** — [Vercel](https://vercel.com) 에서 이 GitHub 레포를 Import 한다.
+   프레임워크는 Next.js 로 자동 감지된다.
+3. **환경 변수 5개 입력** — Vercel 프로젝트 Settings → Environment Variables 에 아래를 넣는다
+   (값은 직접 채운다 — 레포엔 키만 둔다):
+
+   | 변수 | 값 |
+   |---|---|
+   | `STORAGE_DRIVER` | `upstash` |
+   | `UPSTASH_REDIS_REST_URL` | (1에서 복사한 REST URL) |
+   | `UPSTASH_REDIS_REST_TOKEN` | (1에서 복사한 REST TOKEN) |
+   | `ADMIN_PASSWORD` | (가족 공용 비밀번호) |
+   | `ADMIN_COOKIE_SECRET` | (긴 랜덤 문자열 — 예: `openssl rand -hex 32`) |
+
+4. **배포 → URL 공유** — Deploy 하면 공개 URL 이 생긴다. 그 링크를 **카톡으로 가족에게 공유**한다
+   (홈화면 추가 시 PWA 아이콘으로 열린다).
+5. **일정 입력** — `/admin` 에 들어가 `ADMIN_PASSWORD` 로 로그인한 뒤 날짜·일정을 입력·저장하면
+   공개 `/` 에 바로 반영된다.
+
+> **로컬 개발**: KV 없이도 동작한다. `STORAGE_DRIVER=memory` 로 두고 `npm run dev` 하면
+> 인메모리 저장소로 돈다(`ADMIN_PASSWORD`·`ADMIN_COOKIE_SECRET` 만 있으면 `/admin` 도 사용 가능).

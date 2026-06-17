@@ -12,7 +12,7 @@
 | `ADMIN_COOKIE_SECRET` | 세션 쿠키 서명 시크릿 | ✅ | (긴 랜덤 문자열) |
 
 - 비밀 값은 절대 커밋하지 않는다. 관리 정책은 [SECURITY](../security/SECURITY.md) 참조.
-- `.env.example`에 키만 두고 값은 비운다.
+- `env.example`(앞에 점 없음 — 가드가 `.env*` 쓰기를 차단)에 키만 두고 값은 비운다. 배포 절차는 [README §배포](../../README.md).
 - 로컬 개발은 `STORAGE_DRIVER=memory`로 KV 없이 동작 가능(검증 우선 원칙).
 - 배포(Vercel)에서는 환경 변수로 주입하고, KV 토큰은 서버 전용(클라이언트 노출 금지).
 
