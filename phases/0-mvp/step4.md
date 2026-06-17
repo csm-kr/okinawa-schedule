@@ -32,7 +32,8 @@
 ## Acceptance Criteria
 
 ```bash
-npx playwright test e2e/admin.spec.ts   # 웹 AC: 로그인·추가·저장→공개 반영·409
+# 웹 AC: 아이폰(webkit)·안드로이드(chromium) 두 기기 프로젝트 모두에서 통과해야 한다
+npx playwright test e2e/admin.spec.ts --project=iphone --project=android
 npm test                                # AdminLogin/AdminForm RTL
 npm run build
 npm run lint

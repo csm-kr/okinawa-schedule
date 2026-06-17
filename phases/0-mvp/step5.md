@@ -21,13 +21,16 @@
    `apple-mobile-web-app-capable`, `theme-color`. (Next `metadata`/`viewport` API 사용 가능.)
 3. **service worker** `public/sw.js` + 등록(클라이언트 컴포넌트 `src/components/sw-register.tsx`,
    테스트 먼저): 앱 셸은 캐시, **일정 데이터(`/api/itinerary`·`/`)는 network-first(캐시 폴백)**.
-4. **E2E** `e2e/pwa.spec.ts`: `/`에 manifest 링크·`theme-color` 메타 존재, manifest 200 응답,
-   모바일 뷰포트(예: iPhone)에서 렌더 깨지지 않음. (가능하면 SW 등록 확인.)
+4. **E2E** `e2e/pwa.spec.ts`(iphone·android 두 프로젝트): `/`에 manifest 링크·`theme-color` 메타
+   존재, manifest 200 응답, 모바일 뷰포트에서 렌더 깨지지 않음. **아이폰(webkit)**에선 `apple-touch-icon`
+   ·`apple-mobile-web-app-capable` 메타가 있어 홈화면 추가가 가능한지, **안드로이드(chromium)**에선
+   manifest 기반 설치 요건(아이콘 192·512)이 충족되는지 확인. (가능하면 SW 등록 확인.)
 
 ## Acceptance Criteria
 
 ```bash
-npx playwright test e2e/pwa.spec.ts   # 웹 AC: manifest·메타·모바일 뷰포트
+# 웹 AC: 아이폰(webkit)·안드로이드(chromium) 두 기기 프로젝트 모두에서 통과해야 한다
+npx playwright test e2e/pwa.spec.ts --project=iphone --project=android
 npm run build
 npm run lint
 ```

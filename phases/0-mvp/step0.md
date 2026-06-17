@@ -35,11 +35,17 @@
    - 소스 루트는 `src/`.
 2. **Vitest 설정** — `vitest.config.ts`(environment jsdom, `@vitejs/plugin-react`, setup에서
    `@testing-library/jest-dom`). `npm test`로 실행.
-3. **Playwright 설정** — `playwright.config.ts`: headless chromium, `webServer`로 `npm run build &&
-   npm run start`(포트 3000) 기동, `testDir: 'e2e'`. 브라우저 설치: `npx playwright install chromium`.
+3. **Playwright 설정 (아이폰·안드로이드 기기 에뮬레이션)** — `playwright.config.ts`: `testDir: 'e2e'`,
+   `webServer`로 `npm run build && npm run start`(포트 3000) 기동, headless. **`projects`를 모바일
+   2종으로 정의**:
+   - `iphone` — `...devices['iPhone 13']`(엔진=WebKit/Mobile Safari, iOS 거동 검증)
+   - `android` — `...devices['Pixel 5']`(엔진=Chromium/Mobile Chrome)
+   - (선택) `desktop` 프로젝트는 두지 않아도 됨 — 이 앱은 모바일 전용.
+   브라우저 설치: `npx playwright install chromium webkit`(안드로이드=chromium, 아이폰=webkit).
 4. **스모크 테스트(검증 하니스 동작 확인)**:
    - Vitest: `src/lib/smoke.test.ts` — 단순 통과 테스트(예: 순수 함수 호출 결과 단언).
-   - Playwright: `e2e/smoke.spec.ts` — `/` 로드 후 "환갑잔치" 텍스트가 보이는지 단언.
+   - Playwright: `e2e/smoke.spec.ts` — `/` 로드 후 "환갑잔치" 텍스트가 보이는지 단언. **iphone·android
+     두 프로젝트 모두에서** 통과해야 한다.
 5. **가드 동작 확인(수정하지 말 것)** — tdd-guard가 `types/`·`page.tsx`/`layout.tsx`·설정파일은
    면제하고, `lib/`·`components/`·`services/`·route handler의 `.ts/.tsx`는 대응 테스트가 없으면
    차단함을 인지한다(이후 step은 테스트 먼저 작성). `.claude/`·`docs/`는 수정하지 않는다.
@@ -52,7 +58,8 @@
 ```bash
 npm run build          # Next 프로덕션 빌드/타입체크 통과
 npm test               # Vitest 스모크 통과
-npx playwright test    # 헤드리스 chromium 스모크 E2E 통과 (브라우저 설치 후)
+npx playwright install chromium webkit   # 아이폰(webkit)·안드로이드(chromium) 엔진 설치
+npx playwright test    # iphone·android 두 프로젝트에서 스모크 E2E 통과
 npm run lint           # ESLint 통과
 ```
 

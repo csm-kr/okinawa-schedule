@@ -36,7 +36,8 @@
 ## Acceptance Criteria
 
 ```bash
-npx playwright test e2e/timeline.spec.ts   # 웹 AC: 타임라인·강조·탭 (page.clock 고정시간)
+# 웹 AC: 아이폰(webkit)·안드로이드(chromium) 두 기기 프로젝트 모두에서 통과해야 한다
+npx playwright test e2e/timeline.spec.ts --project=iphone --project=android
 npm test                                   # 컴포넌트 RTL + useNow
 npm run build
 npm run lint

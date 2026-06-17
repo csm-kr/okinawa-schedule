@@ -309,6 +309,9 @@ interface ItineraryStore {
 - 디자인 토큰(크림/브라운/살구)·타입 스케일 준수, 본문 ≥18px, 시간/제목은 더 크게, 대비 AA,
   터치 타깃 ≥48px(주요 버튼 56px). AI 슬롭 안티패턴 미사용. (UI step에서 `/design-review`로 검증)
 - `manifest.json`이 있어 모바일에서 홈화면 추가가 가능하다.
+- 핵심 화면 E2E가 **아이폰(WebKit/Mobile Safari)·안드로이드(Chromium/Mobile Chrome) 두 기기
+  에뮬레이션**에서 모두 통과한다. (Playwright `projects`=iphone·android. 실물 기기는 헤드리스
+  불가 → 기기 에뮬레이션으로 대체.)
 - `next build`·ESLint 통과.
 
 ## Verification & Guards (하네스 C 합의 → D 첫 설정 step에서 구현)
