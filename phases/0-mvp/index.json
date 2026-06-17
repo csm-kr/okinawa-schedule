@@ -45,7 +45,10 @@
     {
       "step": 5,
       "name": "pwa",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-06-17T16:01:59+0900",
+      "summary": "PWA 홈화면 추가 + 오프라인 회복 SW — public/manifest.json(name·short_name·standalone·start_url·cream/coral 색·아이콘 192·512) + Node 생성 아이콘 PNG(크림 배경+살구 원) + layout.tsx 메타(manifest·theme-color #E07A5F·apple-touch-icon·apple-mobile-web-app-capable, Next가 deprecated 메타를 안 내보내 other로 명시) + sw.js(앱 셸=cache-first, /·/api/itinerary 데이터=network-first 캐시폴백, 버전 캐시명+activate purge) + SwRegister 클라이언트 등록(TDD 3개 선작성). E2E pwa.spec(iphone·android: manifest 200·메타·아이콘 PNG·모바일 렌더·webkit apple 메타·chromium SW 등록). 단위 86개·build·lint green, playwright 전체 25 passed(3 게이트 skip) 회귀 없음.",
+      "completed_at": "2026-06-17T16:11:17+0900"
     },
     {
       "step": 6,
