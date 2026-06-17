@@ -15,7 +15,7 @@
 
 | # | 발생 위치(phase/step) | 이슈 | 원인 | 해결 / 상태 |
 |---|---|---|---|---|
-| — | — | (아직 없음) | — | — |
+| I1 | 0-mvp / E2E 전체 검증 | 전체 `npx playwright test` 시 timeline R8·admin 반영 테스트 간헐 실패(각 spec 단독은 통과) | 단일 인메모리 저장소 공유 + `fullyParallel` 병렬 → 동시 시드·`revalidatePath('/')` 레이스로 기대 상태가 덮임 | `playwright.config` 직렬화(`fullyParallel:false`, `workers:1`). resolved |
 
 ## 반복 이슈 추적
 같은 종류의 이슈가 다시 발생하면 횟수를 올린다. 3회 도달 시 RULES로 승격.
