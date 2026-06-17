@@ -1,0 +1,13 @@
+{
+  "project": "환갑잔치 가족 안내 웹앱",
+  "phase": "0-mvp",
+  "steps": [
+    { "step": 0, "name": "project-setup", "status": "pending" },
+    { "step": 1, "name": "core-types-and-status", "status": "pending" },
+    { "step": 2, "name": "storage-and-api", "status": "pending" },
+    { "step": 3, "name": "public-timeline", "status": "pending" },
+    { "step": 4, "name": "admin", "status": "pending" },
+    { "step": 5, "name": "pwa", "status": "pending" },
+    { "step": 6, "name": "deploy-prep", "status": "pending" }
+  ]
+}
