@@ -2,12 +2,43 @@
   "project": "환갑잔치 가족 안내 웹앱",
   "phase": "0-mvp",
   "steps": [
-    { "step": 0, "name": "project-setup", "status": "pending" },
-    { "step": 1, "name": "core-types-and-status", "status": "pending" },
-    { "step": 2, "name": "storage-and-api", "status": "pending" },
-    { "step": 3, "name": "public-timeline", "status": "pending" },
-    { "step": 4, "name": "admin", "status": "pending" },
-    { "step": 5, "name": "pwa", "status": "pending" },
-    { "step": 6, "name": "deploy-prep", "status": "pending" }
-  ]
+    {
+      "step": 0,
+      "name": "project-setup",
+      "status": "completed",
+      "started_at": "2026-06-17T14:49:19+0900",
+      "summary": "Next.js 15 + TS(strict) + Tailwind 수동 스캐폴드(src/app), Vitest(jsdom) + Playwright(iphone/android 에뮬) 검증 하니스 구성. 스모크 테스트(Vitest·E2E) 통과, build/lint/test 모두 green."
+    },
+    {
+      "step": 1,
+      "name": "core-types-and-status",
+      "status": "pending"
+    },
+    {
+      "step": 2,
+      "name": "storage-and-api",
+      "status": "pending"
+    },
+    {
+      "step": 3,
+      "name": "public-timeline",
+      "status": "pending"
+    },
+    {
+      "step": 4,
+      "name": "admin",
+      "status": "pending"
+    },
+    {
+      "step": 5,
+      "name": "pwa",
+      "status": "pending"
+    },
+    {
+      "step": 6,
+      "name": "deploy-prep",
+      "status": "pending"
+    }
+  ],
+  "created_at": "2026-06-17T14:49:19+0900"
 }
