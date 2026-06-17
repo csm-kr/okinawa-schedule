@@ -12,6 +12,13 @@ export default defineConfig({
     url: 'http://localhost:3000',
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
+    // E2E 는 인메모리 저장소로 기동하고, 테스트가 login+PUT 로 일정을 시드한다.
+    // 비밀은 테스트 전용 값(프로덕션 비밀과 무관).
+    env: {
+      STORAGE_DRIVER: 'memory',
+      ADMIN_PASSWORD: 'e2e-test-password',
+      ADMIN_COOKIE_SECRET: 'e2e-test-cookie-secret-not-for-production',
+    },
   },
   projects: [
     { name: 'iphone', use: { ...devices['iPhone 13'] } },

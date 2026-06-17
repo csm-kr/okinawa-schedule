@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  /* rem 기반 — 기기 글씨 확대에 대응. */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  /* 크림 베이스 + 잉크 글자(고대비). 본문 하한 18px. */
+  background-color: #fff9f3; /* cream */
+  color: #3d3430; /* ink */
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    'Malgun Gothic', system-ui, sans-serif;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 시간 숫자는 tabular-nums 로 스캔 쉽게. */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
