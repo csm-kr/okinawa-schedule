@@ -20,6 +20,9 @@
 - 방식: **공용 비밀번호 1개**(`ADMIN_PASSWORD`) → 검증 성공 시 **서명 httpOnly 쿠키** 발급.
 - 비밀번호 비교는 **상수시간**(timing attack 방지).
 - 세션: 쿠키 만료(예: 7일). 계정·세션 DB 없음.
+- 쿠키 속성: `HttpOnly`·`SameSite=Lax` 항상. `Secure` 는 **HTTPS 요청에만** 부여한다(프로덕션
+  Vercel 은 항상 HTTPS). 로컬·E2E 의 `http://localhost` 에서는 생략 — WebKit 이 http 에서 Secure
+  쿠키를 버려 로그인 후 화면 전환이 막히기 때문(HTTPS 판별: `x-forwarded-proto` 또는 URL 프로토콜).
 
 ## 인가
 - 읽기(`GET /api/itinerary`, `/`)는 public.

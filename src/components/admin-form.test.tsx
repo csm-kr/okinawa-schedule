@@ -1,0 +1,116 @@
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { AdminForm } from './admin-form';
+import type { Itinerary } from '@/types/itinerary';
+
+const initial: Itinerary = {
+  title: '환갑잔치',
+  subtitle: '9.19–21',
+  timezone: 'Asia/Seoul',
+  version: 3,
+  updatedAt: '2026-09-01T00:00:00.000Z',
+  days: [
+    {
+      id: 'd1',
+      date: '2026-09-19',
+      label: '1일차',
+      items: [{ id: 'i1', startTime: '18:00', title: '가족 만찬', location: '한정식 본관' }],
+    },
+    {
+      id: 'd2',
+      date: '2026-09-20',
+      label: '2일차',
+      items: [{ id: 'j1', startTime: '09:00', title: '조식' }],
+    },
+  ],
+};
+
+describe('AdminForm', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  it('선택된 날짜의 항목을 편집 가능한 필드로 렌더한다', () => {
+    render(<AdminForm initial={initial} />);
+    expect(screen.getByDisplayValue('가족 만찬')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('한정식 본관')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('18:00')).toBeInTheDocument();
+  });
+
+  it('날짜 탭을 바꾸면 그 날 항목이 보인다', () => {
+    render(<AdminForm initial={initial} />);
+    fireEvent.click(screen.getByRole('tab', { name: /2일차/ }));
+    expect(screen.getByDisplayValue('조식')).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('가족 만찬')).not.toBeInTheDocument();
+  });
+
+  it('제목을 수정할 수 있다', () => {
+    render(<AdminForm initial={initial} />);
+    fireEvent.change(screen.getByDisplayValue('가족 만찬'), { target: { value: '가족 만찬(수정)' } });
+    expect(screen.getByDisplayValue('가족 만찬(수정)')).toBeInTheDocument();
+  });
+
+  it('"+ 일정 추가" 를 누르면 빈 항목이 추가된다', () => {
+    render(<AdminForm initial={initial} />);
+    expect(screen.getAllByLabelText('제목')).toHaveLength(1);
+    fireEvent.click(screen.getByRole('button', { name: '+ 일정 추가' }));
+    expect(screen.getAllByLabelText('제목')).toHaveLength(2);
+  });
+
+  it('"삭제" 는 확인 후 항목을 제거한다', () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    render(<AdminForm initial={initial} />);
+    expect(screen.getAllByLabelText('제목')).toHaveLength(1);
+    fireEvent.click(screen.getByRole('button', { name: '삭제' }));
+    expect(window.confirm).toHaveBeenCalledWith('이 일정을 삭제할까요?');
+    expect(screen.queryByLabelText('제목')).not.toBeInTheDocument();
+  });
+
+  it('삭제 확인을 취소하면 항목을 남긴다(R6)', () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    render(<AdminForm initial={initial} />);
+    fireEvent.click(screen.getByRole('button', { name: '삭제' }));
+    expect(screen.getByDisplayValue('가족 만찬')).toBeInTheDocument();
+  });
+
+  it('저장 버튼은 56px(h-14) 다', () => {
+    render(<AdminForm initial={initial} />);
+    expect(screen.getByRole('button', { name: '저장' }).className).toMatch(/h-14/);
+  });
+
+  it('저장하면 expectedVersion 과 함께 PUT 하고 "저장됐어요" 를 보여준다', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { ...initial, version: 4 } }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={initial} />);
+    fireEvent.click(screen.getByRole('button', { name: '저장' }));
+
+    expect(await screen.findByText('저장됐어요')).toBeInTheDocument();
+    const [url, opts] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/itinerary');
+    expect(opts.method).toBe('PUT');
+    const body = JSON.parse(opts.body);
+    expect(body.expectedVersion).toBe(3); // R5 — 로드 시 version 을 그대로 전송
+  });
+
+  it('409 면 충돌 안내를 보여준다', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 409,
+      json: async () => ({ error: '충돌' }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={initial} />);
+    fireEvent.click(screen.getByRole('button', { name: '저장' }));
+
+    expect(
+      await screen.findByText('다른 곳에서 일정이 바뀌었어요. 새로고침 후 다시 저장해 주세요'),
+    ).toBeInTheDocument();
+  });
+});

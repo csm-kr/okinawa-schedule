@@ -25,3 +25,4 @@ phases/**/step*-output.json
 
 # loop check ack (diff-signature bound; not shared)
 .claude/.loop-ack
+.gstack/

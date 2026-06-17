@@ -37,7 +37,10 @@
     {
       "step": 4,
       "name": "admin",
-      "status": "pending"
+      "status": "completed",
+      "started_at": "2026-06-17T15:34:17+0900",
+      "summary": "/admin 로그인+편집 — AdminLogin(가족 비밀번호 56px, 오답 흔들림+\"비밀번호가 달라요\", POST login→router.refresh)·AdminForm(DayTabs 재사용, 시각/제목/장소/메모 편집, +추가, 삭제 confirm 분리(R6), 하단고정 저장 56px, expectedVersion PUT(R5)·409 안내·\"저장됐어요\") RTL TDD 12개 + admin/page.tsx(서버 쿠키검증 R3→폼/로그인 분기). 로그인 쿠키 Secure 를 HTTPS 요청에만 부여(WebKit http Secure-쿠키 폐기 회피, route.test 2개 추가). E2E admin.spec(오답거부·로그인→추가→저장→/반영·stale 409, 하이드레이션 경합 재시도). npm test 83개·build·lint green, playwright iphone/android 14개 green. browse 라이브 측정으로 R8(저장/들어가기 56px·터치≥48px·본문18px)·토큰·슬롭없음·SCREENS 화면2·3 카피 확인.",
+      "completed_at": "2026-06-17T16:00:00+0900"
     },
     {
       "step": 5,

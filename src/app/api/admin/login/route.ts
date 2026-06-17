@@ -11,6 +11,14 @@ const LoginSchema = z.object({ password: z.string().min(1) });
 
 const MAX_AGE_SEC = 60 * 60 * 24 * 7; // 7일
 
+// HTTPS 요청일 때만 Secure 를 붙인다. 프로덕션(Vercel)은 항상 HTTPS 라 Secure 가 켜지고,
+// 로컬·E2E 의 http://localhost 에서는 빠진다(WebKit 은 http 에서 Secure 쿠키를 버리기 때문).
+function isHttps(request: Request): boolean {
+  const proto = request.headers.get("x-forwarded-proto");
+  if (proto) return proto.split(",")[0].trim() === "https";
+  return new URL(request.url).protocol === "https:";
+}
+
 export async function POST(request: Request): Promise<Response> {
   let body: unknown;
   try {
@@ -29,14 +37,15 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const cookie = createSessionCookie();
-  const setCookie = [
+  const parts = [
     `${SESSION_COOKIE_NAME}=${cookie}`,
     "Path=/",
     "HttpOnly",
-    "Secure",
     "SameSite=Lax",
     `Max-Age=${MAX_AGE_SEC}`,
-  ].join("; ");
+  ];
+  if (isHttps(request)) parts.push("Secure");
+  const setCookie = parts.join("; ");
 
   return Response.json(
     { data: { ok: true } },

@@ -2,10 +2,10 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { POST } from './route';
 import { SESSION_COOKIE_NAME, verifySessionCookie } from '@/lib/auth';
 
-function loginRequest(body: unknown): Request {
+function loginRequest(body: unknown, headers: Record<string, string> = {}): Request {
   return new Request('http://localhost/api/admin/login', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...headers },
     body: JSON.stringify(body),
   });
 }
@@ -31,6 +31,16 @@ describe('POST /api/admin/login', () => {
     // 발급된 쿠키 값이 검증을 통과해야 한다(서명 유효).
     const value = /admin_session=([^;]+)/.exec(setCookie ?? '')?.[1];
     expect(verifySessionCookie(value)).toBe(true);
+  });
+
+  it('HTTPS 요청(x-forwarded-proto=https)이면 Secure 를 붙인다', async () => {
+    const res = await POST(loginRequest({ password: 'family-secret' }, { 'x-forwarded-proto': 'https' }));
+    expect(res.headers.get('set-cookie')).toMatch(/Secure/i);
+  });
+
+  it('로컬 HTTP 요청이면 Secure 를 붙이지 않는다(WebKit 이 http 에서 Secure 쿠키를 버림)', async () => {
+    const res = await POST(loginRequest({ password: 'family-secret' }));
+    expect(res.headers.get('set-cookie')).not.toMatch(/Secure/i);
   });
 
   it('비밀번호가 틀리면 401, Set-Cookie 없음', async () => {
