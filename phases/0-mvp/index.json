@@ -7,7 +7,8 @@
       "name": "project-setup",
       "status": "completed",
       "started_at": "2026-06-17T14:49:19+0900",
-      "summary": "Next.js 15 + TS(strict) + Tailwind 수동 스캐폴드(src/app), Vitest(jsdom) + Playwright(iphone/android 에뮬) 검증 하니스 구성. 스모크 테스트(Vitest·E2E) 통과, build/lint/test 모두 green."
+      "summary": "Next.js 15 + TS(strict) + Tailwind 수동 스캐폴드(src/app), Vitest(jsdom) + Playwright(iphone/android 에뮬) 검증 하니스 구성. 스모크 테스트(Vitest·E2E) 통과, build/lint/test 모두 green.",
+      "completed_at": "2026-06-17T14:58:19+0900"
     },
     {
       "step": 1,
