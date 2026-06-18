@@ -25,7 +25,12 @@ export function TimelineView({ itinerary, initialDayId }: Props) {
 
   if (!itinerary || !hasItems) {
     return (
-      <p className="px-4 py-16 text-center text-body text-ink-muted">아직 등록된 일정이 없어요</p>
+      <div className="glass animate-fade-up flex flex-col items-center gap-3 rounded-3xl px-6 py-16 text-center shadow-glass">
+        <span aria-hidden className="text-4xl">
+          🌴
+        </span>
+        <p className="text-body text-ink-muted">아직 등록된 일정이 없어요</p>
+      </div>
     );
   }
 
@@ -36,7 +41,7 @@ export function TimelineView({ itinerary, initialDayId }: Props) {
     <div className="flex flex-col gap-5">
       <StatusCard itinerary={itinerary} now={now} />
       <DayTabs days={itinerary.days} selectedId={selectedDay.id} onSelect={setSelectedId} />
-      <TimelineList day={selectedDay} now={now} />
+      <TimelineList key={selectedDay.id} day={selectedDay} now={now} />
       <DayMap day={selectedDay} />
     </div>
   );

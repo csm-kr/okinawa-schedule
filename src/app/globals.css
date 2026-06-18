@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html {
@@ -12,14 +12,56 @@ html {
 }
 
 body {
-  /* 크림 베이스 + 잉크 글자(고대비). 본문 하한 18px. */
-  background-color: #fff9f3; /* cream */
-  color: #3d3430; /* ink */
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
-    'Malgun Gothic', system-ui, sans-serif;
+  /* 깊은 트로피컬 황혼 그라데이션 베이스. 본문 하한 18px(가독성 유지). */
+  color: #fbf1e6; /* 따뜻한 아이보리 */
+  background-color: #120c24; /* night-deep — 그라데이션 미지원 폴백 */
+  font-family: var(--font-pretendard), 'Pretendard', -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
   font-size: 1.125rem; /* 18px */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 공개 화면 전용 무드 배경 — 고정된 멀티스톱 그라데이션 + 미세한 그레인 느낌의 라디얼.
+   body 에 직접 두지 않고 .aurora 래퍼로 감싸 어드민 화면(밝은 테마)과 분리한다. */
+.aurora {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 80% at 12% 0%, rgba(255, 126, 95, 0.22) 0%, rgba(255, 126, 95, 0) 45%),
+    radial-gradient(110% 70% at 92% 8%, rgba(63, 217, 200, 0.18) 0%, rgba(63, 217, 200, 0) 50%),
+    radial-gradient(140% 90% at 50% 100%, rgba(244, 199, 123, 0.16) 0%, rgba(244, 199, 123, 0) 55%),
+    linear-gradient(180deg, #1a1230 0%, #160f2a 40%, #120c24 100%);
+}
+
+/* 떠다니는 장식 오브(빛망울) — 화면을 덮지 않게 pointer-events 없음. */
+.aurora::before,
+.aurora::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.aurora::before {
+  width: 280px;
+  height: 280px;
+  top: -60px;
+  left: -80px;
+  background: radial-gradient(circle, rgba(255, 126, 95, 0.6), rgba(255, 126, 95, 0));
+  animation: float 11s ease-in-out infinite;
+}
+.aurora::after {
+  width: 240px;
+  height: 240px;
+  top: 30%;
+  right: -90px;
+  background: radial-gradient(circle, rgba(63, 217, 200, 0.45), rgba(63, 217, 200, 0));
+  animation: float 13s ease-in-out infinite reverse;
 }
 
 /* 시간 숫자는 tabular-nums 로 스캔 쉽게. */
@@ -27,26 +69,75 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* 로그인 오답 시 입력칸 흔들림(SCREENS 화면2) — 짧게 1회. */
-@keyframes shake {
-  10%,
-  90% {
-    transform: translateX(-1px);
-  }
-  20%,
-  80% {
-    transform: translateX(2px);
-  }
-  30%,
-  50%,
-  70% {
-    transform: translateX(-4px);
-  }
-  40%,
-  60% {
-    transform: translateX(4px);
-  }
+/* 글래스 카드 — 반투명 + 블러 + 미세 보더 + 상단 시트(빛 반사). */
+.glass {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.04) 38%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
+
+/* 골드 그라데이션 텍스트(히어로 타이틀·강조 숫자). */
+.text-gold-gradient {
+  background: linear-gradient(110deg, #ffe7b0 0%, #f4c77b 45%, #e6a94a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* 골드 샴머 라인(구분선·언더라인). */
+.gold-rule {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(244, 199, 123, 0) 0%,
+    rgba(244, 199, 123, 0.9) 50%,
+    rgba(244, 199, 123, 0) 100%
+  );
+}
+
+/* 라이브 펄스 점(상태 카드 "지금 진행 중"). */
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: #f2784b;
+  box-shadow: 0 0 0 0 rgba(242, 120, 75, 0.6);
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
+
+/* Leaflet 지도를 어두운 테마에 맞춰 살짝 톤다운(타일 대비). */
+.map-dark .leaflet-tile {
+  filter: saturate(0.92) brightness(0.94) contrast(1.02);
+}
+
+/* 로그인 오답 시 입력칸 흔들림(어드민) — config keyframe(shake) 사용. */
 .animate-shake {
   animation: shake 0.4s ease-in-out;
+}
+
+/* 모션 민감 사용자 — 무거운 애니메이션 정지(R: 접근성). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .aurora::before,
+  .aurora::after {
+    animation: none;
+  }
+  .live-dot {
+    animation: none;
+  }
 }

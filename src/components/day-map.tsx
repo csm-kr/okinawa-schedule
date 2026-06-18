@@ -10,7 +10,7 @@ import { dayRoute, pointAlongPath, type LatLng } from '@/lib/map';
 
 // OSM 무료 타일(API 키 없음).
 const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CORAL = '#E07A5F';
+const CORAL = '#F2784B'; // 선셋 코랄(경로선)
 const LOOP_MS = 7000; // 한 바퀴 이동 시간
 
 type LeafletNS = typeof import('leaflet');
@@ -18,9 +18,9 @@ type LeafletNS = typeof import('leaflet');
 function numberIcon(L: LeafletNS, n: number) {
   return L.divIcon({
     className: '',
-    iconSize: [26, 26],
-    iconAnchor: [13, 13],
-    html: `<div style="width:26px;height:26px;border-radius:9999px;background:${CORAL};color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.35)">${n}</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    html: `<div style="width:30px;height:30px;border-radius:9999px;background:linear-gradient(135deg,#FFD98A,#F4C77B 45%,#E25A2B);color:#1A1230;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(26,18,48,.6),0 4px 12px rgba(226,90,43,.55)">${n}</div>`,
   });
 }
 
@@ -72,7 +72,9 @@ export function DayMap({ day }: { day: Day }) {
       });
 
       if (route.length >= 2) {
-        L.polyline(route, { color: CORAL, weight: 4, opacity: 0.85 }).addTo(map);
+        // 글로우용 바깥선 + 본선(코랄).
+        L.polyline(route, { color: '#F4C77B', weight: 8, opacity: 0.25 }).addTo(map);
+        L.polyline(route, { color: CORAL, weight: 4, opacity: 0.95 }).addTo(map);
       }
       map.fitBounds(route, { padding: [36, 36], maxZoom: 14 });
 
@@ -104,14 +106,22 @@ export function DayMap({ day }: { day: Day }) {
   if (route.length === 0) return null;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-line">
-      <div
-        ref={elRef}
-        data-testid="day-map"
-        role="application"
-        aria-label="선택한 날의 동선 지도"
-        className="h-64 w-full"
-      />
-    </div>
+    <section className="glass animate-fade-up overflow-hidden rounded-3xl p-2 shadow-glass">
+      <div className="flex items-center gap-2 px-3 pb-2 pt-1">
+        <span className="text-meta font-semibold uppercase tracking-[0.2em] text-gold">
+          🗺️ 오늘의 동선
+        </span>
+        <span className="gold-rule mt-0.5 flex-1" aria-hidden />
+      </div>
+      <div className="map-dark overflow-hidden rounded-2xl ring-1 ring-white/10">
+        <div
+          ref={elRef}
+          data-testid="day-map"
+          role="application"
+          aria-label="선택한 날의 동선 지도"
+          className="h-64 w-full"
+        />
+      </div>
+    </section>
   );
 }

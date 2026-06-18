@@ -20,14 +20,33 @@ export default async function Home() {
     itinerary?.days.find((d) => d.date === today)?.id ?? itinerary?.days[0]?.id;
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-5 px-4 pb-16 pt-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-header font-bold text-ink">
-          {itinerary?.title ?? '조인수 · 김인숙 여사님 환갑잔치'}
-        </h1>
-        {itinerary?.subtitle && <p className="text-body text-ink-muted">{itinerary.subtitle}</p>}
-      </header>
-      <TimelineView itinerary={itinerary} initialDayId={initialDayId} />
-    </main>
+    <div className="aurora">
+      <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-7 px-4 pb-20 pt-10">
+        <header className="relative flex flex-col items-center gap-3 text-center animate-fade-up">
+          {/* 환갑 = 축하·골드. 작은 윗줄 라벨. */}
+          <p className="flex items-center gap-2 text-meta font-medium uppercase tracking-[0.32em] text-gold">
+            <span aria-hidden>✦</span>
+            <span className="tracking-[0.32em]">환갑잔치</span>
+            <span aria-hidden>✦</span>
+          </p>
+
+          <h1 className="font-display text-[2.1rem] font-extrabold leading-[1.18] text-gold-gradient drop-shadow-[0_2px_18px_rgba(244,199,123,0.25)] [text-wrap:balance] [word-break:keep-all]">
+            {itinerary?.title ?? '조인수 · 김인숙 여사님 환갑잔치'}
+          </h1>
+
+          <div className="gold-rule mt-1 w-32" aria-hidden />
+
+          {itinerary?.subtitle && (
+            <p className="mt-1 flex items-center gap-2 text-body font-medium text-ink/90">
+              <span aria-hidden>🌴</span>
+              <span>{itinerary.subtitle}</span>
+              <span aria-hidden>🌺</span>
+            </p>
+          )}
+        </header>
+
+        <TimelineView itinerary={itinerary} initialDayId={initialDayId} />
+      </main>
+    </div>
   );
 }
