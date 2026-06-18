@@ -26,3 +26,10 @@ phases/**/step*-output.json
 # loop check ack (diff-signature bound; not shared)
 .claude/.loop-ack
 .gstack/
+
+# 로컬 데모/시드 헬퍼 (커밋 안 함 — 로컬 체험용)
+/_seed.json
+/_seed.py
+/_shot.mjs
+/_shots/
+/KakaoTalk_*.jpg

@@ -39,6 +39,20 @@ describe('TimelineItem', () => {
     expect(container.firstChild).toHaveAttribute('data-status', 'upcoming');
   });
 
+  it('url 이 있으면 새 탭으로 여는 링크를 보여준다', () => {
+    const withUrl: ScheduleItem = { ...item, url: 'https://maps.google.com/?q=한정식' };
+    render(<TimelineItem item={withUrl} status="upcoming" />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', 'https://maps.google.com/?q=한정식');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link.getAttribute('rel')).toContain('noopener');
+  });
+
+  it('url 이 없으면 링크를 렌더하지 않는다', () => {
+    render(<TimelineItem item={item} status="upcoming" />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
   it('endTime·location·note 가 없으면 해당 영역을 렌더하지 않는다', () => {
     const minimal: ScheduleItem = { id: 'i2', startTime: '09:00', title: '조식' };
     render(<TimelineItem item={minimal} status="upcoming" />);

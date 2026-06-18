@@ -98,6 +98,54 @@ describe('AdminForm', () => {
     expect(body.expectedVersion).toBe(3); // R5 — 로드 시 version 을 그대로 전송
   });
 
+  it('위도·경도·링크를 입력하면 저장 payload 에 포함된다(숫자/문자)', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { ...initial, version: 4 } }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={initial} />);
+    fireEvent.change(screen.getByLabelText('위도'), { target: { value: '26.2' } });
+    fireEvent.change(screen.getByLabelText('경도'), { target: { value: '127.65' } });
+    fireEvent.change(screen.getByLabelText('링크'), {
+      target: { value: 'https://maps.google.com/?q=x' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: '저장' }));
+
+    await screen.findByText('저장됐어요');
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    const item = body.itinerary.days[0].items[0];
+    expect(item.lat).toBe(26.2);
+    expect(item.lng).toBe(127.65);
+    expect(item.url).toBe('https://maps.google.com/?q=x');
+  });
+
+  it('링크를 비우면 payload 에서 빠진다(빈 문자열 url 로 인한 400 방지)', async () => {
+    const withUrl: Itinerary = {
+      ...initial,
+      days: [
+        { ...initial.days[0], items: [{ id: 'i1', startTime: '18:00', title: '가족 만찬', url: 'https://x.test' }] },
+        initial.days[1],
+      ],
+    };
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { ...withUrl, version: 5 } }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={withUrl} />);
+    fireEvent.change(screen.getByLabelText('링크'), { target: { value: '' } });
+    fireEvent.click(screen.getByRole('button', { name: '저장' }));
+
+    await screen.findByText('저장됐어요');
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.itinerary.days[0].items[0].url).toBeUndefined();
+  });
+
   it('409 면 충돌 안내를 보여준다', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,

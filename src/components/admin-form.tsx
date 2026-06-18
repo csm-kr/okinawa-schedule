@@ -125,6 +125,41 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
               onChange={(e) => patchItem(item.id, { note: e.target.value })}
               className="min-h-12 rounded-xl border border-line bg-surface px-3 text-body text-ink"
             />
+            {/* 동선 지도용 좌표(선택). 비우면 지도에 안 뜬다. */}
+            <div className="flex gap-3">
+              <input
+                type="number"
+                step="any"
+                inputMode="decimal"
+                aria-label="위도"
+                placeholder="위도"
+                value={item.lat ?? ''}
+                onChange={(e) =>
+                  patchItem(item.id, { lat: e.target.value === '' ? undefined : Number(e.target.value) })
+                }
+                className="min-h-12 w-full rounded-xl border border-line bg-surface px-3 text-body text-ink"
+              />
+              <input
+                type="number"
+                step="any"
+                inputMode="decimal"
+                aria-label="경도"
+                placeholder="경도"
+                value={item.lng ?? ''}
+                onChange={(e) =>
+                  patchItem(item.id, { lng: e.target.value === '' ? undefined : Number(e.target.value) })
+                }
+                className="min-h-12 w-full rounded-xl border border-line bg-surface px-3 text-body text-ink"
+              />
+            </div>
+            <input
+              type="url"
+              aria-label="링크"
+              placeholder="링크(지도 URL) — 🔗 새 탭"
+              value={item.url ?? ''}
+              onChange={(e) => patchItem(item.id, { url: e.target.value === '' ? undefined : e.target.value })}
+              className="min-h-12 rounded-xl border border-line bg-surface px-3 text-body text-ink"
+            />
           </li>
         ))}
       </ol>

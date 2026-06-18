@@ -8,6 +8,7 @@ import { useNow } from './use-now';
 import { StatusCard } from './status-card';
 import { DayTabs } from './day-tabs';
 import { TimelineList } from './timeline-list';
+import { DayMap } from './day-map';
 
 type Props = {
   itinerary: Itinerary | null;
@@ -36,6 +37,7 @@ export function TimelineView({ itinerary, initialDayId }: Props) {
       <StatusCard itinerary={itinerary} now={now} />
       <DayTabs days={itinerary.days} selectedId={selectedDay.id} onSelect={setSelectedId} />
       <TimelineList day={selectedDay} now={now} />
+      <DayMap day={selectedDay} />
     </div>
   );
 }

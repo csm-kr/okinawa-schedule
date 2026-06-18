@@ -30,8 +30,11 @@ type ScheduleItem = {
   startTime: string;    // "HH:mm" (day.date 기준, KST)
   endTime?: string;     // 선택
   title: string;
-  location?: string;    // 텍스트만 (지도 비목표)
+  location?: string;    // 위치 텍스트(주소/지명)
   note?: string;
+  url?: string;         // 외부 링크(http/https) — 🔗 새 탭
+  lat?: number;         // 위도 — 동선 지도 점(좌표 없으면 지도에 안 뜸)
+  lng?: number;         // 경도
 };
 ```
 

@@ -14,6 +14,9 @@ const ScheduleItemSchema = z.object({
   title: z.string(),
   location: z.string().optional(),
   note: z.string().optional(),
+  url: z.string().url().optional(),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
 });
 const DaySchema = z.object({
   id: z.string(),

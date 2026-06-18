@@ -92,6 +92,35 @@ describe('PUT /api/itinerary', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/');
   });
 
+  it('url·lat·lng 가 있는 항목도 저장된다(200, 라운드트립)', async () => {
+    const v = await currentVersion();
+    const rich = makeItinerary(v);
+    rich.days[0].items[0] = {
+      id: 'i1',
+      startTime: '18:00',
+      title: '가족 만찬',
+      url: 'https://maps.google.com/?q=test',
+      lat: 26.2,
+      lng: 127.65,
+    };
+    const res = await PUT(putRequest({ itinerary: rich, expectedVersion: v }, { cookie: authCookie() }));
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { data: Itinerary };
+    expect(json.data.days[0].items[0]).toMatchObject({
+      url: 'https://maps.google.com/?q=test',
+      lat: 26.2,
+      lng: 127.65,
+    });
+  });
+
+  it('url 형식이 잘못되면 400', async () => {
+    const v = await currentVersion();
+    const bad = makeItinerary(v);
+    bad.days[0].items[0] = { id: 'i1', startTime: '18:00', title: '가족 만찬', url: 'not-a-url' };
+    const res = await PUT(putRequest({ itinerary: bad, expectedVersion: v }, { cookie: authCookie() }));
+    expect(res.status).toBe(400);
+  });
+
   it('expectedVersion 이 현재와 다르면 409', async () => {
     const v = await currentVersion();
     const res = await PUT(

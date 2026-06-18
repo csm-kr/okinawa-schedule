@@ -9,6 +9,9 @@ export type ScheduleItem = {
   title: string;
   location?: string; // 텍스트만
   note?: string;
+  url?: string; // 외부 링크(http/https) — 🔗 새 탭으로 열기
+  lat?: number; // 위도 — 동선 지도용(좌표 없으면 지도에 안 뜸)
+  lng?: number; // 경도
 };
 
 export type Day = {

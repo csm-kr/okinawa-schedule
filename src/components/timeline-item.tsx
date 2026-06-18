@@ -54,6 +54,18 @@ export function TimelineItem({ item, status }: Props) {
               지금
             </span>
           )}
+          {item.url && (
+            // 보기엔 작은 🔗 지만 탭 영역은 48px 이상으로(R8 접근성). 새 탭으로 연다.
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="지도에서 열기"
+              className="-my-2 ml-auto inline-flex min-h-[48px] min-w-[48px] shrink-0 items-center justify-center text-title"
+            >
+              <span aria-hidden>🔗</span>
+            </a>
+          )}
         </p>
         {item.location && (
           <p className={`text-body ${isPast ? 'text-ink-muted' : 'text-ink'}`}>{item.location}</p>
