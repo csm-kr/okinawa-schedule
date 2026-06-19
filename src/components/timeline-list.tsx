@@ -29,7 +29,7 @@ export function TimelineList({ day, now }: Props) {
   const blockFlags = sorted.map((it) => isInNowBlock(it, day, day.items, now));
 
   return (
-    <section className="glass animate-fade-up relative overflow-hidden rounded-3xl p-5 pt-4 shadow-glass">
+    <section className="glass animate-fade-up relative overflow-hidden rounded-3xl px-3 py-5 pt-4 shadow-glass">
       <div className="mb-2 flex items-center gap-2 px-1">
         <span className="text-meta font-semibold uppercase tracking-[0.2em] text-gold">
           {day.label} 일정
@@ -41,7 +41,7 @@ export function TimelineList({ day, now }: Props) {
         {/* 그라데이션 타임라인 레일 — 점 열을 따라 흐른다. */}
         <span
           aria-hidden
-          className="pointer-events-none absolute bottom-6 left-[6.75rem] top-6 w-px bg-gradient-to-b from-gold/10 via-gold/40 to-aqua/30"
+          className="pointer-events-none absolute bottom-6 left-[5.5rem] top-6 w-px bg-gradient-to-b from-gold/10 via-gold/40 to-aqua/30"
         />
         <ol data-testid="timeline-list" className="relative flex flex-col gap-1">
           {sorted.map((item, i) => (
