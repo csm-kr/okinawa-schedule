@@ -63,6 +63,16 @@ describe('TimelineItem', () => {
     expect(screen.queryByTestId('map-number')).not.toBeInTheDocument();
   });
 
+  it('nowBlock 위치가 주어지면 data-now-block 으로 현재 시간대 블록을 표시한다', () => {
+    const { container } = render(<TimelineItem item={item} status="upcoming" nowBlock="top" />);
+    expect(container.firstChild).toHaveAttribute('data-now-block', 'top');
+  });
+
+  it('nowBlock 이 없으면 data-now-block 속성이 없다', () => {
+    const { container } = render(<TimelineItem item={item} status="upcoming" />);
+    expect(container.firstChild).not.toHaveAttribute('data-now-block');
+  });
+
   it('endTime·location·note 가 없으면 해당 영역을 렌더하지 않는다', () => {
     const minimal: ScheduleItem = { id: 'i2', startTime: '09:00', title: '조식' };
     render(<TimelineItem item={minimal} status="upcoming" />);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getItemStatus, findCurrentAndNext, getEventPhase } from './status';
+import { getItemStatus, findCurrentAndNext, getEventPhase, isInNowBlock } from './status';
 import type { Day, Itinerary, ScheduleItem } from '@/types/itinerary';
 
 // 입력 now 는 항상 명시적 UTC("...Z")로 준다 — 테스트가 기기 로컬 tz 에 의존하지 않게(R7).
@@ -56,6 +56,28 @@ describe('getItemStatus', () => {
   it('비-KST 기기 시각(명시적 UTC)을 줘도 KST 기준으로 판정한다 (R7)', () => {
     // 09:30 UTC = 18:30 KST → i3(18:00~19:00) current. 로컬 파싱 의존 시 틀어진다.
     expect(getItemStatus(day1Items[2], day1, day1Items, new Date('2026-09-19T09:30:00Z'))).toBe('current');
+  });
+});
+
+describe('isInNowBlock', () => {
+  it('지금 ±60분 안에 시작하는 항목을 현재 시간대 블록에 넣는다', () => {
+    // 11:30 KST(02:30 UTC): i2(12:00)는 30분 뒤 시작 → 블록. i1(09:00)은 멀어 제외.
+    const now = new Date('2026-09-19T02:30:00Z');
+    expect(isInNowBlock(day1Items[1], day1, day1Items, now)).toBe(true);
+    expect(isInNowBlock(day1Items[0], day1, day1Items, now)).toBe(false);
+  });
+
+  it('진행 중(current) 항목은 시작이 더 일러도 항상 블록에 포함한다', () => {
+    // 17:30 KST(08:30 UTC): i2(12:00~18:00) 진행 중 — 시작이 5시간 전이어도 포함.
+    const now = new Date('2026-09-19T08:30:00Z');
+    expect(isInNowBlock(day1Items[1], day1, day1Items, now)).toBe(true);
+  });
+
+  it('현재 시각에서 멀리 떨어진 항목은 블록에서 제외한다', () => {
+    // 13:00 KST(04:00 UTC): i1(09:00)·i3(18:00)은 ±60분 밖이고 진행 중도 아님.
+    const now = new Date('2026-09-19T04:00:00Z');
+    expect(isInNowBlock(day1Items[0], day1, day1Items, now)).toBe(false);
+    expect(isInNowBlock(day1Items[2], day1, day1Items, now)).toBe(false);
   });
 });
 

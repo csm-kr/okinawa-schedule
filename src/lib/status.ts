@@ -37,6 +37,22 @@ export function getItemStatus(
   return "past";
 }
 
+// 현재 시각이 든 "시간대 블록"의 반경(분). 지금 ±60분(=약 2시간) 안에 시작하는 항목을 묶는다.
+export const NOW_BLOCK_HALF_MIN = 60;
+
+// 항목이 현재 시간대 블록에 드는가 — 시간표에서 "지금 이 시간대"를 음영으로 묶어 강조하는 용도.
+// 진행 중(current) 항목은 시작이 더 일러도(긴 행사) 항상 포함한다.
+export function isInNowBlock(
+  item: ScheduleItem,
+  day: Day,
+  dayItems: ScheduleItem[],
+  now: Date,
+): boolean {
+  if (getItemStatus(item, day, dayItems, now) === "current") return true;
+  const start = combineKst(day.date, item.startTime).getTime();
+  return Math.abs(start - now.getTime()) <= NOW_BLOCK_HALF_MIN * 60_000;
+}
+
 type Entry = { item: ScheduleItem; day: Day };
 
 // 모든 day 의 항목을 절대 시작 시각 오름차순으로 평탄화.

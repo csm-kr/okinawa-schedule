@@ -2,11 +2,16 @@
 // past=ink-muted+빈 점, current=좌측 coral 바+굵게+큰 글씨+"지금" 뱃지+채운 점, upcoming=ink+테두리 점.
 import type { ItemStatus, ScheduleItem } from '@/types/itinerary';
 
+// 현재 시간대 블록 안에서의 위치 — 음영 띠의 모서리 둥글기·연결을 정한다.
+export type NowBlockPos = 'top' | 'mid' | 'bottom' | 'solo';
+
 type Props = {
   item: ScheduleItem;
   status: ItemStatus;
   // 아래 동선 지도의 마커 번호(1-based). 좌표 없어 지도에 안 뜨는 항목이면 undefined.
   number?: number;
+  // 현재 시각이 든 시간대 블록에 들면 위치값, 아니면 undefined(음영 없음).
+  nowBlock?: NowBlockPos;
 };
 
 // 상태별 타임라인 점 — past=속 빈 회색, current=빛나는 코랄, upcoming=골드 테두리.
@@ -16,18 +21,33 @@ const dotClass: Record<ItemStatus, string> = {
   upcoming: 'border-2 border-gold/70 bg-night-soft',
 };
 
-export function TimelineItem({ item, status, number }: Props) {
+export function TimelineItem({ item, status, number, nowBlock }: Props) {
   const isCurrent = status === 'current';
   const isPast = status === 'past';
+  const inBlock = nowBlock !== undefined;
+
+  // 시간대 블록: 위 행과 배경을 잇고(-mt) 바깥 모서리만 둥글려 하나의 띠로 보이게.
+  const blockClass = inBlock
+    ? [
+        'bg-coral/[0.08]',
+        nowBlock === 'top' || nowBlock === 'solo' ? 'rounded-t-2xl' : '',
+        nowBlock === 'bottom' || nowBlock === 'solo' ? 'rounded-b-2xl' : '',
+        nowBlock === 'mid' || nowBlock === 'bottom' ? '-mt-1' : '',
+      ].join(' ')
+    : 'rounded-2xl';
 
   return (
     <li
       data-status={status}
+      data-now-block={nowBlock}
       className={[
-        'group relative flex gap-3 rounded-2xl py-3 pl-1 pr-1 transition-colors',
+        'group relative flex gap-3 py-3 pl-1 pr-1 transition-colors',
+        blockClass,
         isCurrent
-          ? 'bg-white/[0.07] shadow-glow-coral ring-1 ring-coral/30'
-          : 'hover:bg-white/[0.03]',
+          ? 'z-10 shadow-glow-coral ring-1 ring-coral/40'
+          : inBlock
+            ? ''
+            : 'hover:bg-white/[0.03]',
         isPast ? 'opacity-65' : '',
       ].join(' ')}
     >
