@@ -58,6 +58,51 @@ describe('AdminForm', () => {
     expect(screen.getAllByLabelText('제목')).toHaveLength(2);
   });
 
+  it('항목을 시각(startTime) 오름차순으로 정렬해 렌더한다(저장 순서 무관)', () => {
+    const unordered: Itinerary = {
+      ...initial,
+      days: [
+        {
+          id: 'd1',
+          date: '2026-09-19',
+          label: '1일차',
+          items: [
+            { id: 'a', startTime: '18:00', title: '저녁' },
+            { id: 'b', startTime: '09:00', title: '아침' },
+            { id: 'c', startTime: '12:00', title: '점심' },
+          ],
+        },
+        initial.days[1],
+      ],
+    };
+    render(<AdminForm initial={unordered} />);
+    const times = screen.getAllByLabelText('시각').map((el) => (el as HTMLInputElement).value);
+    expect(times).toEqual(['09:00', '12:00', '18:00']);
+  });
+
+  it('항목 시각을 바꾸면 즉시 시각순으로 재배치된다', () => {
+    const twoItems: Itinerary = {
+      ...initial,
+      days: [
+        {
+          id: 'd1',
+          date: '2026-09-19',
+          label: '1일차',
+          items: [
+            { id: 'a', startTime: '10:00', title: '오전' },
+            { id: 'b', startTime: '20:00', title: '저녁' },
+          ],
+        },
+        initial.days[1],
+      ],
+    };
+    render(<AdminForm initial={twoItems} />);
+    // 둘째(20:00) 항목을 05:00 으로 바꾸면 맨 위로 올라와야 한다.
+    fireEvent.change(screen.getAllByLabelText('시각')[1], { target: { value: '05:00' } });
+    const times = screen.getAllByLabelText('시각').map((el) => (el as HTMLInputElement).value);
+    expect(times).toEqual(['05:00', '10:00']);
+  });
+
   it('"삭제" 는 확인 후 항목을 제거한다', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     render(<AdminForm initial={initial} />);

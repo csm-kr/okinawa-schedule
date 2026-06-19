@@ -1,7 +1,7 @@
 // 관리자 편집(SCREENS 화면3) — 날짜 탭 + 항목 인라인 편집(시각/제목/장소/메모), 추가·삭제, 저장.
 // 로드 시 version 을 보관해 PUT 에 expectedVersion 으로 보낸다(R5 낙관적 동시성). 데이터 쓰기는
-// 서버 route(PUT /api/itinerary)가 쿠키를 검증한다(R3). 편집 목록은 입력 순서 유지(드래그 정렬 없음);
-// 가족이 보는 공개 타임라인은 시각순으로 자동 정렬된다(TimelineList).
+// 서버 route(PUT /api/itinerary)가 쿠키를 검증한다(R3). 편집 목록은 시각(startTime) 오름차순으로
+// 표시한다(추가/시각 수정 시 자동 재배치) — 가족이 보는 공개 타임라인(TimelineList)과 동일 정렬.
 'use client';
 
 import { useState } from 'react';
@@ -26,6 +26,11 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
   const [geoErr, setGeoErr] = useState<string | null>(null); // 좌표 실패한 itemId
 
   const selectedDay = days.find((d) => d.id === selectedId) ?? days[0];
+  // 편집 목록은 항상 시각순으로 보여준다(추가/시각 수정 시 자동 재배치). 공개 TimelineList 와 동일
+  // 패턴 — 사본을 정렬해 표시만 바꾸고 저장 순서는 건드리지 않는다(같은 시각이면 입력 순서 유지).
+  const sortedItems = selectedDay
+    ? [...selectedDay.items].sort((a, b) => a.startTime.localeCompare(b.startTime))
+    : [];
 
   function patchItem(itemId: string, patch: Partial<ScheduleItem>): void {
     setSaveState('idle');
@@ -124,7 +129,7 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
       <DayTabs days={days} selectedId={selectedDay.id} onSelect={setSelectedId} />
 
       <ol className="flex flex-col gap-4">
-        {selectedDay.items.map((item) => (
+        {sortedItems.map((item) => (
           <li key={item.id} className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-4">
             <div className="flex items-center gap-3">
               <input
