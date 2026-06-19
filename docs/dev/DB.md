@@ -12,7 +12,7 @@
 ## 스키마 (TypeScript 타입 = 단일 진실 공급원)
 ```ts
 type Itinerary = {
-  title: string;        // "조인수·김인숙 여사님 환갑잔치"
+  title: string;        // "조인수·김인숙 부부 환갑잔치"
   subtitle?: string;    // 날짜범위 등
   timezone: "Asia/Seoul";
   version: number;      // 낙관적 동시성 — 저장 시 +1
