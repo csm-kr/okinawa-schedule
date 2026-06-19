@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { dayRoute, dayRoutePoints, pointAlongPath, parseLatLngFromMapUrl, type LatLng } from './map';
+import {
+  dayRoute,
+  dayRoutePoints,
+  routeNumberById,
+  pointAlongPath,
+  parseLatLngFromMapUrl,
+  type LatLng,
+} from './map';
 import type { Day } from '@/types/itinerary';
 
 const day: Day = {
@@ -54,6 +61,26 @@ describe('dayRoutePoints', () => {
       { pos: [26.2, 127.65], title: '공항', url: undefined },
       { pos: [26.21, 127.69], title: '점심', url: 'https://maps/x' },
     ]);
+  });
+});
+
+describe('routeNumberById', () => {
+  it('좌표 있는 항목에 시간순 1-based 번호를 매기고, 좌표 없는 항목은 제외한다', () => {
+    // day: a(09:00)·b(13:00)·c(16:00) 좌표 있음, noCoord(10:00) 좌표 없음
+    const m = routeNumberById(day);
+    expect(m.get('a')).toBe(1);
+    expect(m.get('b')).toBe(2);
+    expect(m.get('c')).toBe(3);
+    expect(m.has('noCoord')).toBe(false);
+  });
+
+  it('번호는 dayRoutePoints(지도 마커) 순서와 일치한다', () => {
+    const points = dayRoutePoints(day);
+    const m = routeNumberById(day);
+    // 첫 마커 = 1번(공항=a), 둘째 = 2번(점심=b)
+    expect(m.get('a')).toBe(1);
+    expect(points[0].title).toBe('공항');
+    expect(points[m.get('b')! - 1].title).toBe('점심');
   });
 });
 

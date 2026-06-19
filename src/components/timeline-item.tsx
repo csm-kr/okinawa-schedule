@@ -5,6 +5,8 @@ import type { ItemStatus, ScheduleItem } from '@/types/itinerary';
 type Props = {
   item: ScheduleItem;
   status: ItemStatus;
+  // 아래 동선 지도의 마커 번호(1-based). 좌표 없어 지도에 안 뜨는 항목이면 undefined.
+  number?: number;
 };
 
 // 상태별 타임라인 점 — past=속 빈 회색, current=빛나는 코랄, upcoming=골드 테두리.
@@ -14,7 +16,7 @@ const dotClass: Record<ItemStatus, string> = {
   upcoming: 'border-2 border-gold/70 bg-night-soft',
 };
 
-export function TimelineItem({ item, status }: Props) {
+export function TimelineItem({ item, status, number }: Props) {
   const isCurrent = status === 'current';
   const isPast = status === 'past';
 
@@ -61,7 +63,17 @@ export function TimelineItem({ item, status }: Props) {
             isPast ? 'text-ink-muted' : 'text-ink',
           ].join(' ')}
         >
-          <span className="[word-break:keep-all]">{item.title}</span>
+          {typeof number === 'number' && (
+            // 아래 지도의 같은 번호 마커를 가리킨다 — 마커와 동일한 골드→코랄 원형.
+            <span
+              data-testid="map-number"
+              aria-label={`지도 ${number}번 위치`}
+              className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sunset-gradient text-[0.9rem] font-extrabold leading-none tabular-nums text-night-deep shadow-glow-coral ring-1 ring-night-deep/30"
+            >
+              {number}
+            </span>
+          )}
+          <span className="[word-break:keep-all] [text-wrap:pretty]">{item.title}</span>
           {isCurrent && (
             <span className="flex items-center gap-1 rounded-full bg-sunset-gradient px-2.5 py-0.5 text-meta font-bold text-night-deep shadow-glow-coral">
               <span className="live-dot !bg-night-deep" aria-hidden />
@@ -85,17 +97,21 @@ export function TimelineItem({ item, status }: Props) {
         {item.location && (
           <p
             className={[
-              'mt-0.5 flex items-center gap-1.5 text-body',
+              'mt-1 flex items-start gap-1.5 text-body',
               isPast ? 'text-ink-muted' : 'text-ink/90',
             ].join(' ')}
           >
-            <span aria-hidden className="text-aqua">
+            <span aria-hidden className="shrink-0 pt-0.5 text-aqua">
               ◍
             </span>
-            {item.location}
+            <span className="[word-break:keep-all] [text-wrap:pretty]">{item.location}</span>
           </p>
         )}
-        {item.note && <p className="mt-0.5 text-meta text-ink-muted">{item.note}</p>}
+        {item.note && (
+          <p className="mt-0.5 text-meta text-ink-muted [word-break:keep-all] [text-wrap:pretty]">
+            {item.note}
+          </p>
+        )}
       </div>
     </li>
   );

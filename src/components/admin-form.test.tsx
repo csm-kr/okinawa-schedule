@@ -98,6 +98,25 @@ describe('AdminForm', () => {
     expect(body.expectedVersion).toBe(3); // R5 — 로드 시 version 을 그대로 전송
   });
 
+  it('행사 제목(맨 위 title)을 수정하면 저장 payload 에 포함된다', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { ...initial, version: 4 } }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={initial} />);
+    const titleInput = screen.getByLabelText('행사 제목') as HTMLInputElement;
+    expect(titleInput.value).toBe('칠순잔치'); // 저장된 현재 title 을 보여준다
+    fireEvent.change(titleInput, { target: { value: '조인수 · 김인숙 부부 칠순잔치' } });
+    fireEvent.click(screen.getByRole('button', { name: '저장' }));
+
+    await screen.findByText('저장됐어요');
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(body.itinerary.title).toBe('조인수 · 김인숙 부부 칠순잔치');
+  });
+
   it('위도·경도·링크를 입력하면 저장 payload 에 포함된다(숫자/문자)', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,

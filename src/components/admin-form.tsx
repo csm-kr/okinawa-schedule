@@ -18,6 +18,7 @@ function newItem(): ScheduleItem {
 
 export function AdminForm({ initial }: { initial: Itinerary }) {
   const [days, setDays] = useState<Day[]>(initial.days);
+  const [title, setTitle] = useState(initial.title);
   const [version, setVersion] = useState(initial.version);
   const [selectedId, setSelectedId] = useState(initial.days[0]?.id ?? '');
   const [saveState, setSaveState] = useState<SaveState>('idle');
@@ -81,7 +82,7 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
 
   async function handleSave(): Promise<void> {
     setSaveState('saving');
-    const next: Itinerary = { ...initial, days, version };
+    const next: Itinerary = { ...initial, title, days, version };
     const res = await fetch('/api/itinerary', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -107,6 +108,19 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
 
   return (
     <div className="flex flex-col gap-5">
+      {/* 맨 위 행사 제목(공개 화면 헤더에 그대로 노출). 저장된 title 을 직접 편집한다. */}
+      <input
+        type="text"
+        aria-label="행사 제목"
+        placeholder="행사 제목"
+        value={title}
+        onChange={(e) => {
+          setSaveState('idle');
+          setTitle(e.target.value);
+        }}
+        className="min-h-12 rounded-xl border border-line bg-surface px-4 text-body font-semibold text-ink"
+      />
+
       <DayTabs days={days} selectedId={selectedDay.id} onSelect={setSelectedId} />
 
       <ol className="flex flex-col gap-4">

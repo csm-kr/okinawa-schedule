@@ -53,6 +53,16 @@ describe('TimelineItem', () => {
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 
+  it('number 가 있으면 지도와 같은 번호 뱃지를 보여준다', () => {
+    render(<TimelineItem item={item} status="upcoming" number={2} />);
+    expect(screen.getByTestId('map-number')).toHaveTextContent('2');
+  });
+
+  it('number 가 없으면(좌표 없는 항목) 번호 뱃지를 렌더하지 않는다', () => {
+    render(<TimelineItem item={item} status="upcoming" />);
+    expect(screen.queryByTestId('map-number')).not.toBeInTheDocument();
+  });
+
   it('endTime·location·note 가 없으면 해당 영역을 렌더하지 않는다', () => {
     const minimal: ScheduleItem = { id: 'i2', startTime: '09:00', title: '조식' };
     render(<TimelineItem item={minimal} status="upcoming" />);

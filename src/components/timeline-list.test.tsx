@@ -33,6 +33,23 @@ describe('TimelineList', () => {
     expect(idxLunch).toBeLessThan(idxDinner);
   });
 
+  it('좌표 있는 항목에만 지도와 같은 번호 뱃지를 단다', () => {
+    const mapped: Day = {
+      id: 'd2',
+      date: '2026-09-19',
+      label: '1일차',
+      items: [
+        { id: 'm1', startTime: '09:00', title: '공항', lat: 26.2, lng: 127.65 },
+        { id: 'm2', startTime: '12:00', title: '점심' }, // 좌표 없음 → 번호 없음
+        { id: 'm3', startTime: '16:00', title: '숙소', lat: 26.7, lng: 128.0 },
+      ],
+    };
+    render(<TimelineList day={mapped} now={new Date('2026-09-19T00:00:00Z')} />);
+    // 좌표 있는 항목만, 시간순 1·2 (점심은 뱃지 없음)
+    const badges = screen.getAllByTestId('map-number').map((b) => b.textContent);
+    expect(badges).toEqual(['1', '2']);
+  });
+
   it('현재 시각 기준 진행 중인 항목을 current 로 강조한다', () => {
     // 18:30 KST = 09:30 UTC → 가족 만찬(18:00~20:00) 진행 중
     render(<TimelineList day={day} now={new Date('2026-09-19T09:30:00Z')} />);

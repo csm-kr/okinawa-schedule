@@ -2,6 +2,7 @@
 // getItemStatus 로 now(KST) 기준 계산한다(R7). 데이터 접근 없음 — 순수 표현.
 import type { Day } from '@/types/itinerary';
 import { getItemStatus } from '@/lib/status';
+import { routeNumberById } from '@/lib/map';
 import { TimelineItem } from './timeline-item';
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
 
 export function TimelineList({ day, now }: Props) {
   const sorted = [...day.items].sort((a, b) => a.startTime.localeCompare(b.startTime));
+  // 좌표 있는 항목 → 아래 지도 마커와 같은 번호(없는 항목은 undefined).
+  const numberById = routeNumberById(day);
 
   return (
     <section className="glass animate-fade-up relative overflow-hidden rounded-3xl p-5 pt-4 shadow-glass">
@@ -33,6 +36,7 @@ export function TimelineList({ day, now }: Props) {
               key={item.id}
               item={item}
               status={getItemStatus(item, day, day.items, now)}
+              number={numberById.get(item.id)}
             />
           ))}
         </ol>
