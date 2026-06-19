@@ -10,6 +10,8 @@ describe('getStore', () => {
     delete process.env.STORAGE_DRIVER;
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    delete process.env.KV_REST_API_URL;
+    delete process.env.KV_REST_API_TOKEN;
   });
   afterEach(() => {
     process.env = { ...ORIGINAL };
@@ -28,6 +30,13 @@ describe('getStore', () => {
     process.env.STORAGE_DRIVER = 'upstash';
     process.env.UPSTASH_REDIS_REST_URL = 'https://example.upstash.io';
     process.env.UPSTASH_REDIS_REST_TOKEN = 'token';
+    expect(getStore()).toBeInstanceOf(UpstashStore);
+  });
+
+  it('UPSTASH_* 가 없어도 Vercel 주입 KV_REST_API_* 로 UpstashStore 를 구성한다', () => {
+    process.env.STORAGE_DRIVER = 'upstash';
+    process.env.KV_REST_API_URL = 'https://example.upstash.io';
+    process.env.KV_REST_API_TOKEN = 'kv-token';
     expect(getStore()).toBeInstanceOf(UpstashStore);
   });
 

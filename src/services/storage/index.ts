@@ -14,11 +14,13 @@ export function getStore(): ItineraryStore {
   const driver = process.env.STORAGE_DRIVER ?? "memory";
 
   if (driver === "upstash") {
-    const url = process.env.UPSTASH_REDIS_REST_URL;
-    const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+    // Vercel 의 Upstash(Redis) 마켓플레이스 연동은 KV_REST_API_* 이름으로 주입하므로 fallback 으로 받는다.
+    // (쓰기가 필요하므로 read-only 토큰이 아닌 KV_REST_API_TOKEN 을 쓴다.)
+    const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+    const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
     if (!url || !token) {
       throw new Error(
-        "STORAGE_DRIVER=upstash 이지만 UPSTASH_REDIS_REST_URL/TOKEN 이 설정되지 않았습니다.",
+        "STORAGE_DRIVER=upstash 이지만 UPSTASH_REDIS_REST_URL/TOKEN(또는 KV_REST_API_URL/TOKEN) 이 설정되지 않았습니다.",
       );
     }
     return new UpstashStore(new Redis({ url, token }));

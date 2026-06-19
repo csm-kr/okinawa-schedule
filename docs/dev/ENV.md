@@ -11,6 +11,7 @@
 | `ADMIN_PASSWORD` | `/admin` 공용 비밀번호 | ✅ | — |
 | `ADMIN_COOKIE_SECRET` | 세션 쿠키 서명 시크릿 | ✅ | (긴 랜덤 문자열) |
 
+- **Vercel Upstash(Redis) 연동**: 마켓플레이스 연동은 토큰을 `KV_REST_API_URL`·`KV_REST_API_TOKEN` 이름으로 자동 주입한다. 코드(`services/storage`)가 `UPSTASH_REDIS_REST_*` 가 없으면 이 `KV_REST_API_*`(쓰기 토큰)로 **fallback** 하므로, 대시보드에서 토큰을 수동 복사할 필요가 없다. `KV_REST_API_READ_ONLY_TOKEN`·`KV_URL`·`REDIS_URL` 은 쓰지 않는다.
 - 비밀 값은 절대 커밋하지 않는다. 관리 정책은 [SECURITY](../security/SECURITY.md) 참조.
 - `env.example`(앞에 점 없음 — 가드가 `.env*` 쓰기를 차단)에 키만 두고 값은 비운다. 배포 절차는 [README §배포](../../README.md).
 - 로컬 개발은 `STORAGE_DRIVER=memory`로 KV 없이 동작 가능(검증 우선 원칙).
