@@ -1,26 +1,30 @@
 // 선택한 날의 동선 지도 — 좌표 있는 항목을 시간순 번호 마커 + 연결선으로 그리고,
-// 이동 마커(✈️/🚌)가 경로를 따라 움직인다. Leaflet 은 window 의존이라 클라이언트에서만(useEffect) 로드.
+// 자동차(🚗) 마커가 경로를 따라 움직인다. url 있는 번호 마커는 누르면 새 탭으로 연다.
+// Leaflet 은 window 의존이라 클라이언트에서만(useEffect) 로드.
 // KV·외부 서비스 미접근(R1/R2 무관). 좌표 없는 날이면 렌더하지 않는다.
 'use client';
 
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef } from 'react';
 import type { Day } from '@/types/itinerary';
-import { dayRoute, pointAlongPath, type LatLng } from '@/lib/map';
+import { dayRoutePoints, pointAlongPath, type LatLng } from '@/lib/map';
 
 // OSM 무료 타일(API 키 없음).
 const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const CORAL = '#F2784B'; // 선셋 코랄(경로선)
+const CORAL = '#E8714E'; // 살구 코랄(경로선)
 const LOOP_MS = 7000; // 한 바퀴 이동 시간
 
 type LeafletNS = typeof import('leaflet');
 
-function numberIcon(L: LeafletNS, n: number) {
+// clickable 이면 커서 포인터 + 링(누를 수 있다는 힌트).
+function numberIcon(L: LeafletNS, n: number, clickable: boolean) {
+  const ring = clickable ? ',0 0 0 4px rgba(232,113,78,.35)' : '';
+  const cursor = clickable ? 'cursor:pointer;' : '';
   return L.divIcon({
     className: '',
     iconSize: [30, 30],
     iconAnchor: [15, 15],
-    html: `<div style="width:30px;height:30px;border-radius:9999px;background:linear-gradient(135deg,#FFD98A,#F4C77B 45%,#E25A2B);color:#1A1230;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(26,18,48,.6),0 4px 12px rgba(226,90,43,.55)">${n}</div>`,
+    html: `<div style="${cursor}width:30px;height:30px;border-radius:9999px;background:linear-gradient(135deg,#F6C06A,#E8714E 45%,#C75B43);color:#2A1A12;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(42,26,18,.55),0 4px 12px rgba(224,122,95,.55)${ring}">${n}</div>`,
   });
 }
 
@@ -41,13 +45,14 @@ function prefersReducedMotion(): boolean {
   );
 }
 
-// 비행(✈️) 항목이 있는 날이면 비행기, 아니면 버스 아이콘으로 이동시킨다.
-function moverEmoji(day: Day): string {
-  return day.items.some((it) => it.title.includes('✈')) ? '✈️' : '🚌';
+// 동선은 렌트카 기준 — 자동차 아이콘이 경로를 따라 이동한다.
+function moverEmoji(_day: Day): string {
+  return '🚗';
 }
 
 export function DayMap({ day }: { day: Day }) {
-  const route: LatLng[] = dayRoute(day);
+  const points = dayRoutePoints(day);
+  const route: LatLng[] = points.map((p) => p.pos);
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -67,13 +72,19 @@ export function DayMap({ day }: { day: Day }) {
       });
       L.tileLayer(TILE_URL, { maxZoom: 19, subdomains: 'abc' }).addTo(map);
 
-      route.forEach((pt, i) => {
-        L.marker(pt, { icon: numberIcon(L, i + 1) }).addTo(map!);
+      points.forEach((p, i) => {
+        const marker = L.marker(p.pos, { icon: numberIcon(L, i + 1, !!p.url) }).addTo(map!);
+        if (p.url) {
+          // 번호 마커를 누르면 해당 항목 링크를 새 탭으로 연다.
+          const url = p.url;
+          marker.on('click', () => window.open(url, '_blank', 'noopener,noreferrer'));
+          marker.bindTooltip(p.title, { direction: 'top', offset: [0, -14] });
+        }
       });
 
       if (route.length >= 2) {
-        // 글로우용 바깥선 + 본선(코랄).
-        L.polyline(route, { color: '#F4C77B', weight: 8, opacity: 0.25 }).addTo(map);
+        // 글로우용 바깥선(앰버) + 본선(살구 코랄).
+        L.polyline(route, { color: '#F4A82F', weight: 8, opacity: 0.25 }).addTo(map);
         L.polyline(route, { color: CORAL, weight: 4, opacity: 0.95 }).addTo(map);
       }
       map.fitBounds(route, { padding: [36, 36], maxZoom: 14 });

@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   },
 };
 
-// theme-color 는 viewport 로 분리(Next 메타 API). 다크 트로피컬 베이스에 맞춘 심야 보라.
+// theme-color 는 viewport 로 분리(Next 메타 API). 크림+살구 모던 베이스에 맞춘 따뜻한 크림.
 export const viewport: Viewport = {
-  themeColor: '#120C24',
+  themeColor: '#FBF4E9',
 };
 
 export default function RootLayout({

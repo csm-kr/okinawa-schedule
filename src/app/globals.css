@@ -3,48 +3,46 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
-  /* rem 기반 — 기기 글씨 확대에 대응. */
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  /* 깊은 트로피컬 황혼 그라데이션 베이스. 본문 하한 18px(가독성 유지). */
-  color: #fbf1e6; /* 따뜻한 아이보리 */
-  background-color: #120c24; /* night-deep — 그라데이션 미지원 폴백 */
+  /* 따뜻한 크림 모던 베이스. 본문 하한 18px(가독성 유지). */
+  color: #34302b; /* 딥 잉크 */
+  background-color: #fbf4e9; /* 크림 — 그라데이션 미지원 폴백 */
   font-family: var(--font-pretendard), 'Pretendard', -apple-system, BlinkMacSystemFont,
     'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.125rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* 공개 화면 전용 무드 배경 — 고정된 멀티스톱 그라데이션 + 미세한 그레인 느낌의 라디얼.
-   body 에 직접 두지 않고 .aurora 래퍼로 감싸 어드민 화면(밝은 테마)과 분리한다. */
+/* 공개 화면 전용 무드 배경 — 크림 + 은은한 살구/앰버 라디얼 글로우. */
 .aurora {
   position: relative;
   min-height: 100vh;
   isolation: isolate;
   background:
-    radial-gradient(120% 80% at 12% 0%, rgba(255, 126, 95, 0.22) 0%, rgba(255, 126, 95, 0) 45%),
-    radial-gradient(110% 70% at 92% 8%, rgba(63, 217, 200, 0.18) 0%, rgba(63, 217, 200, 0) 50%),
-    radial-gradient(140% 90% at 50% 100%, rgba(244, 199, 123, 0.16) 0%, rgba(244, 199, 123, 0) 55%),
-    linear-gradient(180deg, #1a1230 0%, #160f2a 40%, #120c24 100%);
+    radial-gradient(120% 80% at 12% 0%, rgba(224, 122, 95, 0.14) 0%, rgba(224, 122, 95, 0) 45%),
+    radial-gradient(110% 70% at 92% 8%, rgba(244, 168, 47, 0.12) 0%, rgba(244, 168, 47, 0) 50%),
+    radial-gradient(140% 90% at 50% 100%, rgba(62, 158, 142, 0.08) 0%, rgba(62, 158, 142, 0) 55%),
+    linear-gradient(180deg, #fff7ee 0%, #faf1e2 45%, #f6ecdb 100%);
 }
 
-/* 떠다니는 장식 오브(빛망울) — 화면을 덮지 않게 pointer-events 없음. */
+/* 떠다니는 장식 오브(빛망울) — 살구/앰버, 은은하게. */
 .aurora::before,
 .aurora::after {
   content: '';
   position: absolute;
   z-index: -1;
   border-radius: 9999px;
-  filter: blur(60px);
-  opacity: 0.55;
+  filter: blur(64px);
+  opacity: 0.42;
   pointer-events: none;
 }
 .aurora::before {
@@ -52,7 +50,7 @@ body {
   height: 280px;
   top: -60px;
   left: -80px;
-  background: radial-gradient(circle, rgba(255, 126, 95, 0.6), rgba(255, 126, 95, 0));
+  background: radial-gradient(circle, rgba(224, 122, 95, 0.5), rgba(224, 122, 95, 0));
   animation: float 11s ease-in-out infinite;
 }
 .aurora::after {
@@ -60,71 +58,88 @@ body {
   height: 240px;
   top: 30%;
   right: -90px;
-  background: radial-gradient(circle, rgba(63, 217, 200, 0.45), rgba(63, 217, 200, 0));
+  background: radial-gradient(circle, rgba(244, 168, 47, 0.42), rgba(244, 168, 47, 0));
   animation: float 13s ease-in-out infinite reverse;
 }
 
-/* 시간 숫자는 tabular-nums 로 스캔 쉽게. */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* 글래스 카드 — 반투명 + 블러 + 미세 보더 + 상단 시트(빛 반사). */
+/* 라이트 글래스 카드 — 반투명 화이트 + 블러 + 미세 보더. */
 .glass {
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.04) 38%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(255, 255, 255, 0.6) 38%,
+    rgba(255, 255, 255, 0.5) 100%
   );
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+  border: 1px solid rgba(60, 40, 20, 0.08);
 }
 
-/* 골드 그라데이션 텍스트(히어로 타이틀·강조 숫자). */
+/* 강조 그라데이션 텍스트(히어로 타이틀·강조) — 피치→살구→딥코랄(크림 위 가독). */
 .text-gold-gradient {
-  background: linear-gradient(110deg, #ffe7b0 0%, #f4c77b 45%, #e6a94a 100%);
+  background: linear-gradient(110deg, #ef9a63 0%, #e07a5f 45%, #c75b43 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
 }
 
-/* 골드 샴머 라인(구분선·언더라인). */
+/* 강조 샴머 라인 — 살구. */
 .gold-rule {
   height: 2px;
   background: linear-gradient(
     90deg,
-    rgba(244, 199, 123, 0) 0%,
-    rgba(244, 199, 123, 0.9) 50%,
-    rgba(244, 199, 123, 0) 100%
+    rgba(224, 122, 95, 0) 0%,
+    rgba(224, 122, 95, 0.85) 50%,
+    rgba(224, 122, 95, 0) 100%
   );
 }
 
-/* 라이브 펄스 점(상태 카드 "지금 진행 중"). */
+/* 라이브 펄스 점(상태 카드 "지금 진행 중") — 살구 코랄. */
 .live-dot {
   position: relative;
   display: inline-block;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 9999px;
-  background: #f2784b;
-  box-shadow: 0 0 0 0 rgba(242, 120, 75, 0.6);
+  background: #e07a5f;
+  box-shadow: 0 0 0 0 rgba(224, 122, 95, 0.55);
   animation: pulse-glow 2.4s ease-in-out infinite;
 }
 
-/* Leaflet 지도를 어두운 테마에 맞춰 살짝 톤다운(타일 대비). */
-.map-dark .leaflet-tile {
-  filter: saturate(0.92) brightness(0.94) contrast(1.02);
+/* 현재 진행 중 항목의 시간 — 반짝반짝(시머 그라데이션). "지금이 여기" 강조.
+   라이트 테마라 흰색 대신 따뜻한 컬러 스톱만(크림 위 가독). */
+.time-now {
+  background: linear-gradient(
+    110deg,
+    #f2784b 0%,
+    #f4a82f 28%,
+    #e07a5f 52%,
+    #d2624a 76%,
+    #f2784b 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 2.4s linear infinite;
 }
 
-/* 로그인 오답 시 입력칸 흔들림(어드민) — config keyframe(shake) 사용. */
+/* Leaflet 지도 — 라이트 테마에 맞춰 자연스럽게(약간 또렷·따뜻하게). */
+.map-dark .leaflet-tile {
+  filter: saturate(1.05) contrast(1.02) brightness(1.0);
+}
+
 .animate-shake {
   animation: shake 0.4s ease-in-out;
 }
 
-/* 모션 민감 사용자 — 무거운 애니메이션 정지(R: 접근성). */
+/* 모션 민감 사용자 — 무거운 애니메이션 정지(접근성). 시머 텍스트는 정적 그라데이션으로 가독성 유지. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -137,7 +152,8 @@ body {
   .aurora::after {
     animation: none;
   }
-  .live-dot {
+  .live-dot,
+  .time-now {
     animation: none;
   }
 }

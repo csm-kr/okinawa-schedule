@@ -32,7 +32,7 @@ export function TimelineItem({ item, status }: Props) {
       <time
         className={[
           'tabular-nums text-time w-[5rem] shrink-0 pt-0.5 text-right',
-          isCurrent ? 'font-extrabold text-gold-gradient' : isPast ? 'text-ink-muted' : 'text-gold',
+          isCurrent ? 'font-extrabold time-now' : isPast ? 'text-ink-muted' : 'text-gold',
         ].join(' ')}
       >
         {item.startTime}
@@ -66,6 +66,7 @@ export function TimelineItem({ item, status }: Props) {
             <span className="flex items-center gap-1 rounded-full bg-sunset-gradient px-2.5 py-0.5 text-meta font-bold text-night-deep shadow-glow-coral">
               <span className="live-dot !bg-night-deep" aria-hidden />
               지금
+              <span aria-hidden className="animate-pulse">✨</span>
             </span>
           )}
           {item.url && (

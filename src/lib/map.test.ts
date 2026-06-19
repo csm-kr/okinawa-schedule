@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { dayRoute, pointAlongPath, type LatLng } from './map';
+import { dayRoute, dayRoutePoints, pointAlongPath, type LatLng } from './map';
 import type { Day } from '@/types/itinerary';
 
 const day: Day = {
@@ -35,6 +35,25 @@ describe('dayRoute', () => {
       items: [{ id: 'i', startTime: '09:00', title: '반쪽', lat: 26.2 }],
     };
     expect(dayRoute(partial)).toEqual([]);
+  });
+});
+
+describe('dayRoutePoints', () => {
+  it('좌표 있는 항목을 시간순으로 pos·title·url 과 함께 반환한다', () => {
+    const d: Day = {
+      id: 'd1',
+      date: '2026-06-21',
+      label: '1일차',
+      items: [
+        { id: 'b', startTime: '13:00', title: '점심', lat: 26.21, lng: 127.69, url: 'https://maps/x' },
+        { id: 'a', startTime: '09:00', title: '공항', lat: 26.2, lng: 127.65 },
+        { id: 'n', startTime: '10:00', title: '이동' }, // 좌표 없음 → 제외
+      ],
+    };
+    expect(dayRoutePoints(d)).toEqual([
+      { pos: [26.2, 127.65], title: '공항', url: undefined },
+      { pos: [26.21, 127.69], title: '점심', url: 'https://maps/x' },
+    ]);
   });
 });
 

@@ -6,7 +6,13 @@ import type { Day } from '@/types/itinerary';
 // Leaflet 은 실제 DOM 레이아웃·타일이 필요해 jsdom 에서 무겁다 — 최소 스텁으로 모킹한다.
 // 렌더(컨테이너 유무) 분기만 검증하고, 실제 지도/애니메이션은 E2E(Playwright)로 본다.
 vi.mock('leaflet', () => {
-  const layer = { addTo: () => layer, setLatLng: () => layer, remove: () => {} };
+  const layer = {
+    addTo: () => layer,
+    setLatLng: () => layer,
+    on: () => layer,
+    bindTooltip: () => layer,
+    remove: () => {},
+  };
   const L = {
     map: () => ({ fitBounds: () => {}, remove: () => {}, setView: () => {} }),
     tileLayer: () => layer,

@@ -4,13 +4,21 @@ import type { Day } from '@/types/itinerary';
 
 export type LatLng = [number, number];
 
+// 지도 마커 1개 — 위치 + 라벨 + (선택)링크. 링크가 있으면 마커를 누르면 새 탭으로 연다.
+export type RoutePoint = { pos: LatLng; title: string; url?: string };
+
 // 좌표(lat·lng 둘 다)가 있는 항목만 startTime 오름차순으로 모아 좌표열을 만든다.
 // 좌표 없는 항목(텍스트만 장소)은 동선에서 제외된다.
 export function dayRoute(day: Day): LatLng[] {
+  return dayRoutePoints(day).map((p) => p.pos);
+}
+
+// dayRoute 와 같은 항목을 pos·title·url 묶음으로 반환 — 마커 클릭 링크용.
+export function dayRoutePoints(day: Day): RoutePoint[] {
   return [...day.items]
     .filter((it) => typeof it.lat === 'number' && typeof it.lng === 'number')
     .sort((a, b) => a.startTime.localeCompare(b.startTime))
-    .map((it) => [it.lat as number, it.lng as number]);
+    .map((it) => ({ pos: [it.lat as number, it.lng as number], title: it.title, url: it.url }));
 }
 
 // 경로 전체 길이 기준 t∈[0,1] 위치의 보간 좌표. 이동 마커 애니메이션용.

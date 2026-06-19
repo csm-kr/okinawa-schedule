@@ -1,44 +1,43 @@
 import type { Config } from 'tailwindcss';
 
-// 디자인 토큰 — "Tropical Sunset Gold" 프리미엄 환갑+오키나와 테마.
-// 깊은 황혼 그라데이션 베이스 + 골드/샴페인 + 코랄→앰버 선셋 + 아쿠아 트로피컬.
-// 글래스모피즘·글로우·그라데이션 강조를 위해 색/그림자/그라데이션/키프레임을 확장한다.
+// 디자인 토큰 — "Cream & Apricot Modern": 따뜻한 크림 베이스 + 살구/코랄 강조를 모던하게.
+// 라이트 글래스 + 살구→앰버 그라데이션 + 은은한 글로우/모션. 본문 18px 유지.
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        cream: '#FFF9F3', // 레거시(어드민 등) 호환용 베이스
+        cream: '#FBF4E9', // 페이지 베이스(따뜻한 크림)
         ink: {
-          DEFAULT: '#FBF1E6', // 어두운 베이스 위 본문(따뜻한 아이보리)
-          muted: '#B9A99C', // 보조·past
+          DEFAULT: '#34302B', // 크림 위 본문(딥 잉크)
+          muted: '#8A7F76', // 보조·past
         },
         coral: {
-          DEFAULT: '#F2784B', // 선셋 코랄(면·강조)
-          strong: '#E25A2B', // 라벨 보강
+          DEFAULT: '#E07A5F', // 살구 코랄(강조·"지금")
+          strong: '#C75B43', // 라벨 보강(대비 AA)
         },
-        // 새 팔레트
+        // 모던 크림+살구 팔레트
         night: {
-          DEFAULT: '#1A1230', // 깊은 자정 보라
-          deep: '#120C24', // 최심부
-          soft: '#2A1E45', // 카드 베이스
+          DEFAULT: '#3A2C20', // 따뜻한 대비(밝은 면 위 라벨)
+          deep: '#2A2019', // 밝은 칩 위 텍스트
+          soft: '#F3E7D6', // 크림 보조 면/점
         },
         gold: {
-          DEFAULT: '#F4C77B', // 샴페인 골드
-          bright: '#FFD98A', // 하이라이트
-          deep: '#C8963E', // 골드 라벨/대비
+          DEFAULT: '#E59A52', // 따뜻한 앰버(보조 강조)
+          bright: '#F3B36C', // 하이라이트
+          deep: '#B96A2A', // 라벨/대비
         },
         aqua: {
-          DEFAULT: '#3FD9C8', // 트로피컬 아쿠아
-          deep: '#179C8E',
+          DEFAULT: '#3E9E8E', // 소프트 틸(장소·트로피컬 힌트)
+          deep: '#2C7E72',
         },
-        sunset: '#FF7E5F',
-        amber: '#FFB155',
-        plum: '#3B2360',
+        sunset: '#F2784B',
+        amber: '#F4A82F',
+        plum: '#D2624A',
         surface: '#FFFFFF', // 레거시 카드(어드민)
-        line: '#EFE4DA', // 레거시 경계선
-        glass: 'rgba(255,255,255,0.08)',
-        'glass-line': 'rgba(255,255,255,0.16)',
+        line: '#EFE0CE', // 크림 경계선
+        glass: 'rgba(255,255,255,0.6)',
+        'glass-line': 'rgba(60,40,20,0.08)',
       },
       fontFamily: {
         display: ['var(--font-display)', 'Georgia', 'serif'],
@@ -54,27 +53,26 @@ const config: Config = {
         ],
       },
       fontSize: {
-        // 본문 하한 18px(1.125rem) 유지.
-        meta: ['1rem', { lineHeight: '1.5' }], // 16px 보조/메모
-        body: ['1.125rem', { lineHeight: '1.6' }], // 18px 본문/장소
-        title: ['1.375rem', { lineHeight: '1.45' }], // 22px 일정 제목
-        time: ['1.4375rem', { lineHeight: '1.35' }], // 23px 시간
-        header: ['2rem', { lineHeight: '1.2' }], // 32px 화면 헤더(디스플레이)
-        status: ['1.75rem', { lineHeight: '1.35' }], // 28px 상태 카드 제목
-        hero: ['2.5rem', { lineHeight: '1.12' }], // 40px 히어로 디스플레이
+        meta: ['1rem', { lineHeight: '1.5' }],
+        body: ['1.125rem', { lineHeight: '1.6' }],
+        title: ['1.375rem', { lineHeight: '1.45' }],
+        time: ['1.4375rem', { lineHeight: '1.35' }],
+        header: ['2rem', { lineHeight: '1.2' }],
+        status: ['1.75rem', { lineHeight: '1.35' }],
+        hero: ['2.5rem', { lineHeight: '1.12' }],
       },
       backgroundImage: {
-        'sunset-gradient': 'linear-gradient(120deg,#FF7E5F 0%,#FFB155 50%,#F4C77B 100%)',
-        'gold-gradient': 'linear-gradient(110deg,#FFD98A 0%,#F4C77B 45%,#C8963E 100%)',
-        'aqua-gradient': 'linear-gradient(120deg,#3FD9C8 0%,#179C8E 100%)',
-        'glass-sheen': 'linear-gradient(135deg,rgba(255,255,255,0.18) 0%,rgba(255,255,255,0.04) 40%,rgba(255,255,255,0) 70%)',
+        'sunset-gradient': 'linear-gradient(120deg,#F2784B 0%,#F4A82F 55%,#F6C06A 100%)',
+        'gold-gradient': 'linear-gradient(110deg,#F2A86B 0%,#E07A5F 45%,#C75B43 100%)',
+        'aqua-gradient': 'linear-gradient(120deg,#48B0A0 0%,#2C7E72 100%)',
+        'glass-sheen': 'linear-gradient(135deg,rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.2) 40%,rgba(255,255,255,0) 70%)',
       },
       boxShadow: {
-        glass: '0 10px 40px -12px rgba(10,6,25,0.7), inset 0 1px 0 0 rgba(255,255,255,0.10)',
-        'glow-coral': '0 0 0 1px rgba(242,120,75,0.35), 0 8px 30px -6px rgba(242,120,75,0.55)',
-        'glow-gold': '0 0 0 1px rgba(244,199,123,0.4), 0 10px 36px -8px rgba(244,199,123,0.5)',
-        'glow-aqua': '0 0 28px -4px rgba(63,217,200,0.5)',
-        lift: '0 18px 50px -18px rgba(8,4,20,0.85)',
+        glass: '0 12px 32px -14px rgba(120,70,30,0.22), inset 0 1px 0 0 rgba(255,255,255,0.7)',
+        'glow-coral': '0 0 0 1px rgba(224,122,95,0.30), 0 8px 24px -8px rgba(224,122,95,0.5)',
+        'glow-gold': '0 0 0 1px rgba(229,154,82,0.26), 0 10px 28px -10px rgba(229,154,82,0.45)',
+        'glow-aqua': '0 0 24px -6px rgba(62,158,142,0.35)',
+        lift: '0 18px 44px -20px rgba(120,70,30,0.35)',
       },
       keyframes: {
         shake: {
@@ -87,13 +85,10 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(14px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
+        'fade-in': { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
         'pulse-glow': {
-          '0%,100%': { boxShadow: '0 0 0 0 rgba(242,120,75,0.55)' },
-          '50%': { boxShadow: '0 0 0 10px rgba(242,120,75,0)' },
+          '0%,100%': { boxShadow: '0 0 0 0 rgba(224,122,95,0.5)' },
+          '50%': { boxShadow: '0 0 0 10px rgba(224,122,95,0)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
