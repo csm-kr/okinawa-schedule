@@ -21,6 +21,8 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
   const [version, setVersion] = useState(initial.version);
   const [selectedId, setSelectedId] = useState(initial.days[0]?.id ?? '');
   const [saveState, setSaveState] = useState<SaveState>('idle');
+  const [geoBusy, setGeoBusy] = useState<string | null>(null); // 좌표 찾는 중인 itemId
+  const [geoErr, setGeoErr] = useState<string | null>(null); // 좌표 실패한 itemId
 
   const selectedDay = days.find((d) => d.id === selectedId) ?? days[0];
 
@@ -50,6 +52,31 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
         d.id === selectedDay.id ? { ...d, items: d.items.filter((it) => it.id !== itemId) } : d,
       ),
     );
+  }
+
+  // 링크(구글맵 URL)에서 위도·경도를 추출해 채운다. 단축링크는 서버가 리다이렉트를 펼친다.
+  async function fillCoordsFromUrl(item: ScheduleItem): Promise<void> {
+    const url = item.url?.trim();
+    if (!url) return;
+    setGeoErr(null);
+    setGeoBusy(item.id);
+    try {
+      const res = await fetch('/api/resolve-map', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) {
+        setGeoErr(item.id);
+        return;
+      }
+      const { data } = (await res.json()) as { data: { lat: number; lng: number } };
+      patchItem(item.id, { lat: data.lat, lng: data.lng });
+    } catch {
+      setGeoErr(item.id);
+    } finally {
+      setGeoBusy(null);
+    }
   }
 
   async function handleSave(): Promise<void> {
@@ -160,6 +187,19 @@ export function AdminForm({ initial }: { initial: Itinerary }) {
               onChange={(e) => patchItem(item.id, { url: e.target.value === '' ? undefined : e.target.value })}
               className="min-h-12 rounded-xl border border-line bg-surface px-3 text-body text-ink"
             />
+            <button
+              type="button"
+              onClick={() => fillCoordsFromUrl(item)}
+              disabled={geoBusy === item.id}
+              className="min-h-12 rounded-xl border border-line px-4 text-meta font-medium text-ink-muted disabled:opacity-60"
+            >
+              {geoBusy === item.id ? '좌표 찾는 중…' : '📍 링크에서 좌표 채우기'}
+            </button>
+            {geoErr === item.id && (
+              <p role="alert" className="text-meta text-coral-strong">
+                링크에서 좌표를 못 찾았어요. 링크를 확인해 주세요
+              </p>
+            )}
           </li>
         ))}
       </ol>

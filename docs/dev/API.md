@@ -38,6 +38,16 @@ route handler 엔드포인트, 권한, 상태 코드를 정의한다.
 | 응답 | `{ data: { ok: true } }` + `Set-Cookie` |
 | 상태 코드 | 200 / 400 / 401 비밀번호 불일치 |
 
+### `POST /api/resolve-map`
+| 항목 | 내용 |
+|---|---|
+| 설명 | 구글맵 링크에서 위도·경도를 추출(admin 좌표 입력 보조). 전체 URL 은 문자열에서 바로 파싱하고, 단축링크(`maps.app.goo.gl` 등)는 리다이렉트를 펼쳐서 추출 |
+| 권한 | admin (서명 httpOnly 쿠키 필요) |
+| 요청 | `{ url: string }` (zod 검증, http/https) |
+| 응답 | `{ data: { lat: number, lng: number } }` |
+| 상태 코드 | 200 / 400 검증 실패·비구글 호스트 / 401 미인증 / 404 좌표 없음 / 502 펼치기 실패 |
+| 보안 | 네트워크 fetch 는 **구글 소유 호스트로만** 제한(SSRF 차단, [SECURITY](../security/SECURITY.md)) |
+
 > (선택) `POST /api/admin/logout` — 쿠키 제거. 구현 시 200.
 
 ## 에러 코드 규약
@@ -45,5 +55,7 @@ route handler 엔드포인트, 권한, 상태 코드를 정의한다.
 |---|---|---|
 | 400 | 입력 검증 실패 | zod 스키마 불일치 |
 | 401 | 미인증 | admin 쿠키 없음/무효, 비밀번호 불일치 |
+| 404 | 좌표 없음 | resolve-map 이 링크를 펼쳐도 좌표를 못 찾음 |
 | 409 | 충돌 | `expectedVersion` ≠ 현재 version (동시 편집) |
 | 500 | 서버 오류 | KV 접근 실패 등 |
+| 502 | 외부 펼치기 실패 | resolve-map 단축링크 fetch 실패 |

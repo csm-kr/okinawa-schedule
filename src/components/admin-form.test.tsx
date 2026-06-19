@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { AdminForm } from './admin-form';
 import type { Itinerary } from '@/types/itinerary';
 
@@ -144,6 +144,39 @@ describe('AdminForm', () => {
     await screen.findByText('저장됐어요');
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
     expect(body.itinerary.days[0].items[0].url).toBeUndefined();
+  });
+
+  it('"좌표 채우기" 는 링크를 /api/resolve-map 으로 보내 위도·경도를 채운다', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => ({ data: { lat: 26.5, lng: 127.9 } }),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    render(<AdminForm initial={initial} />);
+    fireEvent.change(screen.getByLabelText('링크'), {
+      target: { value: 'https://maps.app.goo.gl/abc' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /좌표 채우기/ }));
+
+    await waitFor(() =>
+      expect((screen.getByLabelText('위도') as HTMLInputElement).value).toBe('26.5'),
+    );
+    expect((screen.getByLabelText('경도') as HTMLInputElement).value).toBe('127.9');
+
+    const [url, opts] = fetchMock.mock.calls[0];
+    expect(url).toBe('/api/resolve-map');
+    expect(opts.method).toBe('POST');
+    expect(JSON.parse(opts.body)).toEqual({ url: 'https://maps.app.goo.gl/abc' });
+  });
+
+  it('링크가 비어 있으면 좌표 채우기는 호출하지 않는다', () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+    render(<AdminForm initial={initial} />); // i1 은 url 없음
+    fireEvent.click(screen.getByRole('button', { name: /좌표 채우기/ }));
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('409 면 충돌 안내를 보여준다', async () => {

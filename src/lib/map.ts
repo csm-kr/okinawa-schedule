@@ -21,6 +21,37 @@ export function dayRoutePoints(day: Day): RoutePoint[] {
     .map((it) => ({ pos: [it.lat as number, it.lng as number], title: it.title, url: it.url }));
 }
 
+// 구글맵 링크에서 [위도, 경도] 를 뽑는다 — admin 좌표 입력 보조(클라이언트·서버 공용).
+// 지원: place(!3d!4d, 가장 정확) · query/q/ll= · @lat,lng(지도 중심) · 평문 "lat,lng".
+// 단축링크(maps.app.goo.gl)는 좌표가 안 담겨 있어 null → 서버에서 리다이렉트를 펼쳐야 한다.
+export function parseLatLngFromMapUrl(input: string): LatLng | null {
+  if (!input) return null;
+  let s = input.trim();
+  try {
+    s = decodeURIComponent(s);
+  } catch {
+    // 잘못된 퍼센트 인코딩이면 원문 그대로 시도한다.
+  }
+
+  const n = '(-?\\d+(?:\\.\\d+)?)';
+  // 정확도 순서: place 좌표 → 쿼리 파라미터 → 지도 중심 → 평문.
+  const patterns = [
+    new RegExp(`!3d${n}!4d${n}`),
+    new RegExp(`[?&](?:query|q|ll|destination)=${n}\\s*,\\s*${n}`),
+    new RegExp(`@${n}\\s*,\\s*${n}`),
+    new RegExp(`^${n}\\s*,\\s*${n}$`),
+  ];
+  for (const re of patterns) {
+    const m = s.match(re);
+    if (m) {
+      const lat = Number(m[1]);
+      const lng = Number(m[2]);
+      if (lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180) return [lat, lng];
+    }
+  }
+  return null;
+}
+
 // 경로 전체 길이 기준 t∈[0,1] 위치의 보간 좌표. 이동 마커 애니메이션용.
 // 거리는 lat/lng 평면 유클리드(소규모 동선·애니메이션 용도로 충분, 측지선 아님).
 export function pointAlongPath(path: LatLng[], t: number): LatLng {

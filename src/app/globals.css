@@ -8,6 +8,9 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* 핀치 확대/축소 차단 + 상하 스크롤만 허용(iOS·안드). 지도(.leaflet-container)는
+     leaflet 이 자체 touch-action 을 설정해 지도 안에서의 확대/이동은 그대로 동작한다. */
+  touch-action: pan-y;
 }
 
 body {

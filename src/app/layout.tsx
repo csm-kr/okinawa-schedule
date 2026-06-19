@@ -41,8 +41,14 @@ export const metadata: Metadata = {
 };
 
 // theme-color 는 viewport 로 분리(Next 메타 API). 크림+살구 모던 베이스에 맞춘 따뜻한 크림.
+// 모바일에서 핀치 확대/축소를 막고 상하 스크롤만 허용한다(iOS·안드 공통). 본문이 이미 18px+ 라
+// 확대 의존도가 낮고, 잘못된 확대로 레이아웃이 틀어지는 것을 방지한다.
 export const viewport: Viewport = {
   themeColor: '#FBF4E9',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

@@ -15,6 +15,7 @@
 | 쿠키 위조 | 인증 우회 | `ADMIN_COOKIE_SECRET`로 서명, httpOnly·Secure·SameSite |
 | XSS(일정 텍스트) | 스크립트 주입 | React 기본 이스케이프, `dangerouslySetInnerHTML` 금지 |
 | 링크 유출 | 일정이 외부에 보임 | 민감 정보 미게재. 필요 시 링크 교체로 대응 |
+| SSRF(resolve-map) | 서버가 임의 URL fetch | admin 인증 필수 + **구글 소유 호스트만** fetch(허용목록), 그 외는 fetch 없이 400 |
 
 ## 인증
 - 방식: **공용 비밀번호 1개**(`ADMIN_PASSWORD`) → 검증 성공 시 **서명 httpOnly 쿠키** 발급.
