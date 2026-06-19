@@ -21,7 +21,7 @@ const sans = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   title: '환갑잔치 안내',
-  description: '조인수 · 김인숙 여사님 환갑잔치 가족 안내',
+  description: '조인수 · 김인숙 부부 환갑잔치 가족 안내',
   manifest: '/manifest.json',
   // iOS 홈화면 추가 — apple-touch-icon, status bar, 앱 타이틀.
   appleWebApp: {

@@ -7,7 +7,7 @@ import type { Itinerary } from '../src/types/itinerary';
 const PASSWORD = 'e2e-test-password';
 
 const seedItinerary: Itinerary = {
-  title: '조인수 · 김인숙 여사님 환갑잔치',
+  title: '조인수 · 김인숙 부부 환갑잔치',
   subtitle: '9.19–21',
   timezone: 'Asia/Seoul',
   version: 0,

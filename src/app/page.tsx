@@ -31,7 +31,7 @@ export default async function Home() {
           </p>
 
           <h1 className="font-display text-[2.1rem] font-extrabold leading-[1.18] text-gold-gradient drop-shadow-[0_2px_18px_rgba(244,199,123,0.25)] [text-wrap:balance] [word-break:keep-all]">
-            {itinerary?.title ?? '조인수 · 김인숙 여사님 환갑잔치'}
+            {itinerary?.title ?? '조인수 · 김인숙 부부 환갑잔치'}
           </h1>
 
           <div className="gold-rule mt-1 w-32" aria-hidden />
