@@ -41,7 +41,7 @@ export function TimelineItem({ item, status, number, nowBlock }: Props) {
       data-status={status}
       data-now-block={nowBlock}
       className={[
-        'group relative flex gap-3 py-3 pl-1 pr-1 transition-colors',
+        'group relative flex gap-2 py-3 pl-1 pr-1 transition-colors',
         blockClass,
         isCurrent
           ? 'z-10 shadow-glow-coral ring-1 ring-coral/40'
@@ -53,7 +53,7 @@ export function TimelineItem({ item, status, number, nowBlock }: Props) {
     >
       <time
         className={[
-          'tabular-nums text-time w-[5rem] shrink-0 pt-0.5 text-right',
+          'tabular-nums text-time w-16 shrink-0 pt-0.5 text-left',
           isCurrent ? 'font-extrabold time-now' : isPast ? 'text-ink-muted' : 'text-gold',
         ].join(' ')}
       >
