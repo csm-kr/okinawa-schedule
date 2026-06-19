@@ -10,7 +10,7 @@ import type { Itinerary } from '@/types/itinerary';
 // 일정이 아직 없을 때 편집을 시작할 빈 문서.
 function emptyItinerary(): Itinerary {
   return {
-    title: '조인수 · 김인숙 부부 환갑잔치',
+    title: '조인수 · 김인숙 부부 칠순잔치',
     timezone: 'Asia/Seoul',
     version: 0,
     updatedAt: new Date().toISOString(),

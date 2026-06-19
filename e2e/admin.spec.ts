@@ -8,7 +8,7 @@ const PASSWORD = 'e2e-test-password';
 const CONFLICT_MESSAGE = '다른 곳에서 일정이 바뀌었어요. 새로고침 후 다시 저장해 주세요';
 
 const seedItinerary: Itinerary = {
-  title: '조인수 · 김인숙 부부 환갑잔치',
+  title: '조인수 · 김인숙 부부 칠순잔치',
   subtitle: '9.19–21',
   timezone: 'Asia/Seoul',
   version: 0,

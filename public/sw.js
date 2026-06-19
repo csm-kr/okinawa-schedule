@@ -1,4 +1,4 @@
-// 환갑잔치 안내 PWA service worker.
+// 칠순잔치 안내 PWA service worker.
 // - 앱 셸(해시된 정적 자원·아이콘·manifest): cache-first (빠르게).
 // - 그 밖(`/`·`/admin` 내비게이션, `/api/itinerary` 데이터): network-first(캐시 폴백).
 //   이유: 일정은 KV 가 단일 진실 공급원 — cache-first 면 편집 반영이 지연된다(STATE).

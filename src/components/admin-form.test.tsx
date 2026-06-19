@@ -4,7 +4,7 @@ import { AdminForm } from './admin-form';
 import type { Itinerary } from '@/types/itinerary';
 
 const initial: Itinerary = {
-  title: '환갑잔치',
+  title: '칠순잔치',
   subtitle: '9.19–21',
   timezone: 'Asia/Seoul',
   version: 3,

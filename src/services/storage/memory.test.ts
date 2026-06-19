@@ -6,7 +6,7 @@ import type { Itinerary } from '@/types/itinerary';
 // 최소 유효 문서. version 0 = 아직 한 번도 저장 안 된 초기 상태.
 function makeItinerary(overrides: Partial<Itinerary> = {}): Itinerary {
   return {
-    title: '환갑잔치',
+    title: '칠순잔치',
     timezone: 'Asia/Seoul',
     version: 0,
     updatedAt: '2026-09-01T00:00:00.000Z',

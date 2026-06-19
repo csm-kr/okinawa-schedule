@@ -1,7 +1,7 @@
 {
-  "name": "환갑잔치 안내",
-  "short_name": "환갑잔치",
-  "description": "조인수 · 김인숙 여사님 환갑잔치 가족 안내",
+  "name": "칠순잔치 안내",
+  "short_name": "칠순잔치",
+  "description": "조인수 · 김인숙 여사님 칠순잔치 가족 안내",
   "display": "standalone",
   "start_url": "/",
   "scope": "/",

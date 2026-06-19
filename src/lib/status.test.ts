@@ -18,7 +18,7 @@ const day2Items: ScheduleItem[] = [
 const day2: Day = { id: 'd2', date: '2026-09-20', label: '2일차', items: day2Items };
 
 const itinerary: Itinerary = {
-  title: '환갑잔치',
+  title: '칠순잔치',
   timezone: 'Asia/Seoul',
   version: 1,
   updatedAt: '2026-09-01T00:00:00.000Z',

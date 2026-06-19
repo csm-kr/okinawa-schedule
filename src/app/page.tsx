@@ -23,15 +23,15 @@ export default async function Home() {
     <div className="aurora">
       <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-7 px-4 pb-20 pt-10">
         <header className="relative flex flex-col items-center gap-3 text-center animate-fade-up">
-          {/* 환갑 = 축하·골드. 작은 윗줄 라벨. */}
+          {/* 칠순 = 축하·골드. 작은 윗줄 라벨. */}
           <p className="flex items-center gap-2 text-meta font-medium uppercase tracking-[0.32em] text-gold">
             <span aria-hidden>✦</span>
-            <span className="tracking-[0.32em]">환갑잔치</span>
+            <span className="tracking-[0.32em]">칠순잔치</span>
             <span aria-hidden>✦</span>
           </p>
 
           <h1 className="font-display text-[2.1rem] font-extrabold leading-[1.18] text-gold-gradient drop-shadow-[0_2px_18px_rgba(244,199,123,0.25)] [text-wrap:balance] [word-break:keep-all]">
-            {itinerary?.title ?? '조인수 · 김인숙 부부 환갑잔치'}
+            {itinerary?.title ?? '조인수 · 김인숙 부부 칠순잔치'}
           </h1>
 
           <div className="gold-rule mt-1 w-32" aria-hidden />

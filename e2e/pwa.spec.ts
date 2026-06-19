@@ -30,8 +30,8 @@ test('manifest 가 200 으로 응답하고 색·아이콘(192·512)이 DESIGN_GU
     theme_color: string;
     icons: { src: string; sizes: string; type: string }[];
   };
-  expect(manifest.name).toBe('환갑잔치 안내');
-  expect(manifest.short_name).toBe('환갑잔치');
+  expect(manifest.name).toBe('칠순잔치 안내');
+  expect(manifest.short_name).toBe('칠순잔치');
   expect(manifest.display).toBe('standalone');
   expect(manifest.start_url).toBe('/');
   expect(manifest.background_color).toBe('#FFF9F3'); // cream

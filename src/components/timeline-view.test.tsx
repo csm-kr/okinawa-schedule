@@ -4,7 +4,7 @@ import { TimelineView } from './timeline-view';
 import type { Itinerary } from '@/types/itinerary';
 
 const itinerary: Itinerary = {
-  title: '환갑잔치',
+  title: '칠순잔치',
   timezone: 'Asia/Seoul',
   version: 1,
   updatedAt: '2026-09-01T00:00:00.000Z',
